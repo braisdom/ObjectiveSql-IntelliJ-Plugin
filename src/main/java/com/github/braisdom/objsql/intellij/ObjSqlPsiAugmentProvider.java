@@ -52,26 +52,26 @@ public class ObjSqlPsiAugmentProvider extends PsiAugmentProvider {
         return result;
     }
 
-    private static class FieldObjSqlCachedValueProvider<Psi extends PsiElement> extends ObjSqlCachedValueProvider<Psi> {
-        private static final RecursionGuard ourGuard = RecursionManager.createGuard("lombok.augment.field");
+    private static class FieldCachedValueProvider<Psi extends PsiElement> extends ObjSqlCachedValueProvider<Psi> {
+        private static final RecursionGuard ourGuard = RecursionManager.createGuard("objsql.augment.field");
 
-        FieldObjSqlCachedValueProvider(Class<Psi> type, PsiClass psiClass) {
+        FieldCachedValueProvider(Class<Psi> type, PsiClass psiClass) {
             super(type, psiClass, ourGuard);
         }
     }
 
-    private static class MethodObjSqlCachedValueProvider<Psi extends PsiElement> extends ObjSqlCachedValueProvider<Psi> {
-        private static final RecursionGuard ourGuard = RecursionManager.createGuard("lombok.augment.method");
+    private static class MethodCachedValueProvider<Psi extends PsiElement> extends ObjSqlCachedValueProvider<Psi> {
+        private static final RecursionGuard ourGuard = RecursionManager.createGuard("objsql.augment.method");
 
-        MethodObjSqlCachedValueProvider(Class<Psi> type, PsiClass psiClass) {
+        MethodCachedValueProvider(Class<Psi> type, PsiClass psiClass) {
             super(type, psiClass, ourGuard);
         }
     }
 
-    private static class ClassObjSqlCachedValueProvider<Psi extends PsiElement> extends ObjSqlCachedValueProvider<Psi> {
-        private static final RecursionGuard ourGuard = RecursionManager.createGuard("lombok.augment.class");
+    private static class ClassCachedValueProvider<Psi extends PsiElement> extends ObjSqlCachedValueProvider<Psi> {
+        private static final RecursionGuard ourGuard = RecursionManager.createGuard("objsql.augment.class");
 
-        ClassObjSqlCachedValueProvider(Class<Psi> type, PsiClass psiClass) {
+        ClassCachedValueProvider(Class<Psi> type, PsiClass psiClass) {
             super(type, psiClass, ourGuard);
         }
     }
