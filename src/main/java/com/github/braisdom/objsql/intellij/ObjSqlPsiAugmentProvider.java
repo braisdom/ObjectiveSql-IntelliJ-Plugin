@@ -29,8 +29,6 @@ public class ObjSqlPsiAugmentProvider extends PsiAugmentProvider {
         }
 
         final PsiClass psiClass = (PsiClass) element;
-        final Project project = element.getProject();
-
         if (psiClass.isAnnotationType() || psiClass.isInterface()) {
             return result;
         }
@@ -94,6 +92,7 @@ public class ObjSqlPsiAugmentProvider extends PsiAugmentProvider {
                     SetterGetterMethodBuilder.buildSetterGetterMethod(psiClass, result);
                     PrimaryBuilder.buildPrimarySG(psiClass, result);
                 } else if(type == PsiField.class) {
+                    RelationFieldBuilder.build(psiClass, result);
                     PrimaryBuilder.buildPrimaryField(psiClass, result);
                 }
 

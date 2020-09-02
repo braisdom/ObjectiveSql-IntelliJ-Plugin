@@ -16,15 +16,11 @@ final class PrimaryBuilder {
     static void buildPrimaryField(PsiClass psiClass, List result) {
         PsiType primaryType = getPrimaryType(psiClass);
         String primaryName = getPrimaryName(psiClass);
-        LightFieldBuilder primaryBuilder = new LightFieldBuilder(psiClass.getManager(), primaryName, primaryType);
-        primaryBuilder.setModifiers(PsiModifier.PRIVATE);
-        primaryBuilder.setNavigationElement(psiClass);
+        LightFieldBuilder primaryBuilder = new LightFieldBuilder(primaryName, primaryType, psiClass);
+        primaryBuilder.setModifiers(PsiModifier.PUBLIC, PsiModifier.STATIC);
+        primaryBuilder.setContainingClass(psiClass);
 
-        PsiElementFactory psiElementFactory = JavaPsiFacade.getElementFactory(psiClass.getProject());
-        PsiExpression initializer = psiElementFactory.createExpressionFromText("\"" + primaryName + "\"", psiClass);
-        primaryBuilder.setInitializer(initializer);
-
-        result.add(result);
+        result.add(primaryBuilder);
     }
 
     static void buildPrimarySG(PsiClass psiClass, List result) {
