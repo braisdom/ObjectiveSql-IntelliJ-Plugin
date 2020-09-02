@@ -53,6 +53,11 @@ public class ObjSqlLightMethodBuilder extends LightMethodBuilder {
     return super.setMethodReturnType(returnType);
   }
 
+  public ObjSqlLightMethodBuilder withParameter(@NotNull String name, @NotNull PsiType type) {
+    addParameter(name, type);
+    return this;
+  }
+
   public ObjSqlLightMethodBuilder withParameter(@NotNull PsiParameter psiParameter) {
     addParameter(psiParameter);
     return this;
