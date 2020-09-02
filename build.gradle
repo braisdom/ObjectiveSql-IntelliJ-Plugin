@@ -1,0 +1,55 @@
+plugins {
+    id "org.jetbrains.intellij" version "0.3.5"
+}
+
+group 'com.github.braisdom'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+apply plugin: 'idea'
+idea {
+    project {
+        jdkName = '1.8'
+        languageLevel = '1.8'
+    }
+}
+
+apply plugin: 'java'
+compileJava {
+    options.encoding = 'UTF-8'
+    options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+}
+
+
+apply plugin: 'org.jetbrains.intellij'
+intellij {
+    version = "2018.3"
+    type = 'IC'
+    updateSinceUntilBuild = false
+    downloadSources = true
+    publish {
+        username = project.hasProperty('jetbrainsUser')    \
+              ? project.property('jetbrainsUser')    \
+              : System.getenv('JETBRAINS_USER')
+        password = project.hasProperty('jetbrainsPassword')    \
+              ? project.property('jetbrainsPassword')   \
+              : System.getenv('JETBRAINS_PASSWORD')
+        pluginId = '8277'
+    }
+}
+
+patchPluginXml {
+    changeNotes """
+      Add change notes here.<br>
+      <em>most HTML tags may be used</em>"""
+}

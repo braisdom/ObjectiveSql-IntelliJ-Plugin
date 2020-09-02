@@ -1,0 +1,19 @@
+<idea-plugin>
+    <id>com.github.braisdom.object-sql-intellij</id>
+    <name>ObjectSQL</name>
+    <vendor email="wangyonghe@msn.com" url="http://www.objectsql.com">Braisdom</vendor>
+    <version>1.0</version>
+    <description><![CDATA[Filling the generated elements for ObjectSql]]></description>
+
+    <depends>com.intellij.modules.lang</depends>
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.java</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+    </extensions>
+
+    <actions>
+        <!-- Add your actions here -->
+    </actions>
+</idea-plugin>
