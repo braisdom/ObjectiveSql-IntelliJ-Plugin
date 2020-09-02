@@ -17,6 +17,8 @@ import java.util.List;
 
 public class ObjSqlPsiAugmentProvider extends PsiAugmentProvider {
 
+    public static final String DOMAIN_MODEL_CLASSNAME = "com.github.braisdom.objsql.annotations.DomainModel";
+
     @NotNull
     @Override
     protected <Psi extends PsiElement> List<Psi> getAugments(@NotNull PsiElement element, @NotNull Class<Psi> type) {
@@ -33,24 +35,17 @@ public class ObjSqlPsiAugmentProvider extends PsiAugmentProvider {
             return result;
         }
 
-        PsiAnnotation psiAnnotation = PsiAnnotationSearchUtil.findAnnotation(psiClass,
-                "com.github.braisdom.objsql.annotations.DomainModel");
+        PsiAnnotation psiAnnotation = PsiAnnotationSearchUtil.findAnnotation(psiClass, DOMAIN_MODEL_CLASSNAME);
 
         if (psiAnnotation == null)
             return result;
 
         final List<Psi> cachedValue;
-        if (type == PsiMethod.class) {
+        if (type == PsiMethod.class)
             cachedValue = CachedValuesManager.getCachedValue(element, new MethodCachedValueProvider<>(type, psiClass));
-//            ObjSqlLightMethodBuilder methodBuilder = new ObjSqlLightMethodBuilder(psiClass.getManager(), "createQuery");
-//            methodBuilder.withContainingClass((PsiClass) element)
-//                    .withMethodReturnType(PsiType.getTypeByName("com.github.braisdom.funcsql.Query", project,
-//                            GlobalSearchScope.allScope(project)))
-//                    .withNavigationElement(psiClass)
-//                    .withModifier(PsiModifier.PUBLIC, PsiModifier.STATIC);
-//
-//            result.add((Psi) methodBuilder);
-        } else return result;
+        else if(type == PsiField.class)
+            cachedValue = CachedValuesManager.getCachedValue(element, new FieldCachedValueProvider<>(type, psiClass));
+        else return result;
 
         return null != cachedValue ? cachedValue : result;
     }
@@ -97,6 +92,9 @@ public class ObjSqlPsiAugmentProvider extends PsiAugmentProvider {
 
                 if (type == PsiMethod.class) {
                     SetterGetterMethodBuilder.buildSetterGetterMethod(psiClass, result);
+                    PrimaryBuilder.buildPrimarySG(psiClass, result);
+                } else if(type == PsiField.class) {
+                    PrimaryBuilder.buildPrimaryField(psiClass, result);
                 }
 
                 return Result.create(result, PsiModificationTracker.JAVA_STRUCTURE_MODIFICATION_COUNT);

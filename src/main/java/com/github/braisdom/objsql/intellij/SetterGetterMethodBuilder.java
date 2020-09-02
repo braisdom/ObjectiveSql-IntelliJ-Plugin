@@ -37,13 +37,13 @@ final class SetterGetterMethodBuilder {
         }
     }
 
-    private static boolean isBoolean(PsiType type) {
+    static boolean isBoolean(PsiType type) {
         String typeText = type.getCanonicalText();
         return typeText.equalsIgnoreCase("boolean") ||
                 typeText.equalsIgnoreCase("java.lang.Boolean");
     }
 
-    private static String upperFirstChar(String str) {
+    static String upperFirstChar(String str) {
         char[] ch = str.toCharArray();
         if (ch[0] >= 'a' && ch[0] <= 'z') {
             ch[0] = (char) (ch[0] - 32);
