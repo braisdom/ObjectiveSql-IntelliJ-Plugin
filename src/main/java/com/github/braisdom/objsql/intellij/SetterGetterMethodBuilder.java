@@ -17,7 +17,7 @@ final class SetterGetterMethodBuilder {
         Collection<PsiField> fields =  PsiClassUtil.collectClassFieldsIntern(psiClass);
         for(PsiField field : fields) {
             String setterName = String.format("set%s", upperFirstChar(field.getName()));
-            String getterName = String.format("%s%s", field.getType().equalsToText("Boolean") ? "is" : "get",
+            String getterName = String.format("%s%s", isBoolean(field.getType()) ? "is" : "get",
                     upperFirstChar(field.getName()));
             ObjSqlLightMethodBuilder setterMethodBuilder = new ObjSqlLightMethodBuilder(psiClass.getManager(), setterName);
             ObjSqlLightMethodBuilder getterMethodBuilder = new ObjSqlLightMethodBuilder(psiClass.getManager(), getterName);
@@ -35,6 +35,12 @@ final class SetterGetterMethodBuilder {
             result.add(setterMethodBuilder);
             result.add(getterMethodBuilder);
         }
+    }
+
+    private static boolean isBoolean(PsiType type) {
+        String typeText = type.getCanonicalText();
+        return typeText.equalsIgnoreCase("boolean") ||
+                typeText.equalsIgnoreCase("java.lang.Boolean");
     }
 
     private static String upperFirstChar(String str) {
