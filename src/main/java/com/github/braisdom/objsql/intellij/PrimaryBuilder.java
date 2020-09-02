@@ -17,7 +17,7 @@ final class PrimaryBuilder {
         PsiType primaryType = getPrimaryType(psiClass);
         String primaryName = getPrimaryName(psiClass);
         LightFieldBuilder primaryBuilder = new LightFieldBuilder(primaryName, primaryType, psiClass);
-        primaryBuilder.setModifiers(PsiModifier.PUBLIC, PsiModifier.STATIC);
+        primaryBuilder.setModifiers(PsiModifier.PRIVATE);
         primaryBuilder.setContainingClass(psiClass);
 
         result.add(primaryBuilder);
