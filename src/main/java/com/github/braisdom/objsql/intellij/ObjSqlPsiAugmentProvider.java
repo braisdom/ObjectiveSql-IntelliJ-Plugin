@@ -8,6 +8,7 @@ import com.intellij.psi.augment.PsiAugmentProvider;
 import com.intellij.psi.impl.source.PsiExtensibleClass;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.CachedValueProvider;
+import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.util.PsiModificationTracker;
 import org.jetbrains.annotations.NotNull;
 
@@ -35,21 +36,23 @@ public class ObjSqlPsiAugmentProvider extends PsiAugmentProvider {
         PsiAnnotation psiAnnotation = PsiAnnotationSearchUtil.findAnnotation(psiClass,
                 "com.github.braisdom.objsql.annotations.DomainModel");
 
-        if(psiAnnotation == null)
+        if (psiAnnotation == null)
             return result;
 
+        final List<Psi> cachedValue;
         if (type == PsiMethod.class) {
-            ObjSqlLightMethodBuilder methodBuilder = new ObjSqlLightMethodBuilder(psiClass.getManager(), "createQuery");
-            methodBuilder.withContainingClass((PsiClass) element)
-                    .withMethodReturnType(PsiType.getTypeByName("com.github.braisdom.funcsql.Query", project,
-                            GlobalSearchScope.allScope(project)))
-                    .withNavigationElement(psiClass)
-                    .withModifier(PsiModifier.PUBLIC, PsiModifier.STATIC);
+            cachedValue = CachedValuesManager.getCachedValue(element, new MethodCachedValueProvider<>(type, psiClass));
+//            ObjSqlLightMethodBuilder methodBuilder = new ObjSqlLightMethodBuilder(psiClass.getManager(), "createQuery");
+//            methodBuilder.withContainingClass((PsiClass) element)
+//                    .withMethodReturnType(PsiType.getTypeByName("com.github.braisdom.funcsql.Query", project,
+//                            GlobalSearchScope.allScope(project)))
+//                    .withNavigationElement(psiClass)
+//                    .withModifier(PsiModifier.PUBLIC, PsiModifier.STATIC);
+//
+//            result.add((Psi) methodBuilder);
+        } else return result;
 
-            result.add((Psi) methodBuilder);
-        }
-
-        return result;
+        return null != cachedValue ? cachedValue : result;
     }
 
     private static class FieldCachedValueProvider<Psi extends PsiElement> extends ObjSqlCachedValueProvider<Psi> {
@@ -91,6 +94,10 @@ public class ObjSqlPsiAugmentProvider extends PsiAugmentProvider {
         public Result<List<Psi>> compute() {
             return recursionGuard.doPreventingRecursion(psiClass, true, () -> {
                 final List<Psi> result = new ArrayList<>();
+
+                if (type == PsiMethod.class) {
+                    SetterGetterMethodBuilder.buildSetterGetterMethod(psiClass, result);
+                }
 
                 return Result.create(result, PsiModificationTracker.JAVA_STRUCTURE_MODIFICATION_COUNT);
             });
