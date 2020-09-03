@@ -1,14 +1,16 @@
 package com.github.braisdom.objsql.intellij;
 
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiModifier;
+import com.intellij.psi.PsiType;
 import com.intellij.psi.impl.light.LightFieldBuilder;
 import com.intellij.psi.search.GlobalSearchScope;
 
-import java.util.Arrays;
 import java.util.List;
 
-import static com.github.braisdom.objsql.intellij.ObjSqlPsiAugmentProvider.*;
+import static com.github.braisdom.objsql.intellij.ObjSqlPsiAugmentProvider.getPrimaryName;
+import static com.github.braisdom.objsql.intellij.ObjSqlPsiAugmentProvider.getPrimaryType;
 import static com.github.braisdom.objsql.intellij.SetterGetterMethodBuilder.upperFirstChar;
 
 final class PrimaryBuilder {

@@ -44,11 +44,6 @@ public class PsiClassUtil {
     }
   }
 
-  public static PsiType getProjectType(String qName, Project project) {
-    return PsiType.getTypeByName(qName,
-            project, GlobalSearchScope.allScope(project));
-  }
-
   /**
    * Workaround to get all of original inner classes of the psiClass, without calling PsiAugmentProvider infinitely
    *

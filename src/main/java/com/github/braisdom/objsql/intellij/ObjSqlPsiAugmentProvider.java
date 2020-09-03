@@ -94,9 +94,11 @@ public class ObjSqlPsiAugmentProvider extends PsiAugmentProvider {
                     PrimaryBuilder.buildMethod(psiClass, result);
                     QueryMethodBuilder.buildMethod(psiClass, result);
                     PersistenceMethodBuilder.buildMethod(psiClass, result);
+                    ModelMethodBuilder.buildMethod(psiClass, result);
                 } else if(type == PsiField.class) {
                     RelationFieldBuilder.buildField(psiClass, result);
                     PrimaryBuilder.buildField(psiClass, result);
+                    ModelMethodBuilder.buildField(psiClass, result);
                 }
 
                 return Result.create(result, PsiModificationTracker.JAVA_STRUCTURE_MODIFICATION_COUNT);
@@ -125,6 +127,20 @@ public class ObjSqlPsiAugmentProvider extends PsiAugmentProvider {
                 Arrays.copyOfRange(rawPrimaryTypePart, 0, rawPrimaryTypePart.length - 1));
 
         return PsiType.getTypeByName(primaryTypeName, project, GlobalSearchScope.allScope(project));
+    }
+
+    static PsiType getProjectType(String qName, Project project) {
+        return PsiType.getTypeByName(qName,
+                project, GlobalSearchScope.allScope(project));
+    }
+
+    static PsiType createParameterInterfaceType(Project project, String qName, String... parameters) {
+        PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
+        PsiClassType classType = (PsiClassType) getProjectType(qName, project);
+        List<PsiType> psiTypes = new ArrayList<>();
+        for(String parameter : parameters)
+            psiTypes.add(getProjectType(parameter, project));
+        return factory.createType(classType.resolve(), psiTypes.toArray(new PsiType[]{}));
     }
 
 }

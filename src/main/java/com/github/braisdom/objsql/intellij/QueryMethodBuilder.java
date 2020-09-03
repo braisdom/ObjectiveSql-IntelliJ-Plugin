@@ -9,7 +9,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 
 import java.util.List;
 
-import static com.github.braisdom.objsql.intellij.PsiClassUtil.getProjectType;
+import static com.github.braisdom.objsql.intellij.ObjSqlPsiAugmentProvider.getProjectType;
 
 final class QueryMethodBuilder {
 
