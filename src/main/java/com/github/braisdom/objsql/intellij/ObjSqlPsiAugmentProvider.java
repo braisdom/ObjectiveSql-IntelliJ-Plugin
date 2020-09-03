@@ -1,12 +1,10 @@
 package com.github.braisdom.objsql.intellij;
 
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.RecursionGuard;
 import com.intellij.openapi.util.RecursionManager;
 import com.intellij.psi.*;
 import com.intellij.psi.augment.PsiAugmentProvider;
 import com.intellij.psi.impl.source.PsiExtensibleClass;
-import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.util.PsiModificationTracker;
@@ -89,8 +87,9 @@ public class ObjSqlPsiAugmentProvider extends PsiAugmentProvider {
                 final List<Psi> result = new ArrayList<>();
 
                 if (type == PsiMethod.class) {
-                    SetterGetterMethodBuilder.buildSetterGetterMethod(psiClass, result);
-                    PrimaryBuilder.buildPrimarySG(psiClass, result);
+                    SetterGetterMethodBuilder.build(psiClass, result);
+                    PrimaryBuilder.build(psiClass, result);
+                    QueryMethodBuilder.build(psiClass, result);
                 } else if(type == PsiField.class) {
                     RelationFieldBuilder.build(psiClass, result);
                     PrimaryBuilder.buildPrimaryField(psiClass, result);

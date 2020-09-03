@@ -23,7 +23,7 @@ final class PrimaryBuilder {
         result.add(primaryBuilder);
     }
 
-    static void buildPrimarySG(PsiClass psiClass, List result) {
+    static void build(PsiClass psiClass, List result) {
         Project project = psiClass.getProject();
         PsiType primaryType = getPrimaryType(psiClass);
         String primaryName = getPrimaryName(psiClass);
