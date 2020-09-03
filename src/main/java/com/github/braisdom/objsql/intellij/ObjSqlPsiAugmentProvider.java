@@ -44,6 +44,8 @@ public class ObjSqlPsiAugmentProvider extends PsiAugmentProvider {
             cachedValue = CachedValuesManager.getCachedValue(element, new MethodCachedValueProvider<>(type, psiClass));
         else if(type == PsiField.class)
             cachedValue = CachedValuesManager.getCachedValue(element, new FieldCachedValueProvider<>(type, psiClass));
+        else if(type == PsiClass.class)
+            cachedValue = CachedValuesManager.getCachedValue(element, new ClassCachedValueProvider<>(type, psiClass));
         else return result;
 
         return null != cachedValue ? cachedValue : result;
@@ -99,6 +101,8 @@ public class ObjSqlPsiAugmentProvider extends PsiAugmentProvider {
                     RelationFieldBuilder.buildField(psiClass, result);
                     PrimaryBuilder.buildField(psiClass, result);
                     ModelMethodBuilder.buildField(psiClass, result);
+                } else if(type == PsiClass.class) {
+                    TableClassBuilder.buildClass(psiClass, result);
                 }
 
                 return Result.create(result, PsiModificationTracker.JAVA_STRUCTURE_MODIFICATION_COUNT);
