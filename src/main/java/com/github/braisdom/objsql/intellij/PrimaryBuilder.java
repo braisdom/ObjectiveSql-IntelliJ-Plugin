@@ -8,7 +8,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.github.braisdom.objsql.intellij.ObjSqlPsiAugmentProvider.DOMAIN_MODEL_CLASSNAME;
+import static com.github.braisdom.objsql.intellij.ObjSqlPsiAugmentProvider.*;
 import static com.github.braisdom.objsql.intellij.SetterGetterMethodBuilder.upperFirstChar;
 
 final class PrimaryBuilder {
@@ -46,28 +46,5 @@ final class PrimaryBuilder {
 
         result.add(setterMethodBuilder);
         result.add(getterMethodBuilder);
-    }
-
-    static String getPrimaryName(PsiClass psiClass) {
-        PsiAnnotationMemberValue annotationMemberValue = psiClass
-                .getAnnotation(DOMAIN_MODEL_CLASSNAME).findAttributeValue("primaryFieldName");
-        if(annotationMemberValue == null)
-            return "id";
-        else
-            return annotationMemberValue.getText().replaceAll("^\"|\"$", "");
-    }
-
-    static PsiType getPrimaryType(PsiClass psiClass) {
-        Project project = psiClass.getProject();
-        String rawPrimaryTypeName = "Integer.class";
-        PsiAnnotationMemberValue annotationMemberValue = psiClass
-                .getAnnotation(DOMAIN_MODEL_CLASSNAME).findAttributeValue("primaryClass");
-        if(annotationMemberValue != null)
-            rawPrimaryTypeName = annotationMemberValue.getText();
-        String[] rawPrimaryTypePart = rawPrimaryTypeName.split("\\.");
-        String primaryTypeName = String.join(".",
-                Arrays.copyOfRange(rawPrimaryTypePart, 0, rawPrimaryTypePart.length - 1));
-
-        return PsiType.getTypeByName(primaryTypeName, project, GlobalSearchScope.allScope(project));
     }
 }

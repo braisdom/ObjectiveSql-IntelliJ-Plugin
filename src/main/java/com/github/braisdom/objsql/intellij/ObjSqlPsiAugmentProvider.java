@@ -1,16 +1,19 @@
 package com.github.braisdom.objsql.intellij;
 
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.RecursionGuard;
 import com.intellij.openapi.util.RecursionManager;
 import com.intellij.psi.*;
 import com.intellij.psi.augment.PsiAugmentProvider;
 import com.intellij.psi.impl.source.PsiExtensibleClass;
+import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.util.PsiModificationTracker;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ObjSqlPsiAugmentProvider extends PsiAugmentProvider {
@@ -90,6 +93,7 @@ public class ObjSqlPsiAugmentProvider extends PsiAugmentProvider {
                     SetterGetterMethodBuilder.build(psiClass, result);
                     PrimaryBuilder.build(psiClass, result);
                     QueryMethodBuilder.build(psiClass, result);
+                    PersistenceMethodBuilder.build(psiClass, result);
                 } else if(type == PsiField.class) {
                     RelationFieldBuilder.build(psiClass, result);
                     PrimaryBuilder.buildPrimaryField(psiClass, result);
@@ -98,6 +102,29 @@ public class ObjSqlPsiAugmentProvider extends PsiAugmentProvider {
                 return Result.create(result, PsiModificationTracker.JAVA_STRUCTURE_MODIFICATION_COUNT);
             });
         }
+    }
+
+    static String getPrimaryName(PsiClass psiClass) {
+        PsiAnnotationMemberValue annotationMemberValue = psiClass
+                .getAnnotation(DOMAIN_MODEL_CLASSNAME).findAttributeValue("primaryFieldName");
+        if(annotationMemberValue == null)
+            return "id";
+        else
+            return annotationMemberValue.getText().replaceAll("^\"|\"$", "");
+    }
+
+    static PsiType getPrimaryType(PsiClass psiClass) {
+        Project project = psiClass.getProject();
+        String rawPrimaryTypeName = "Integer.class";
+        PsiAnnotationMemberValue annotationMemberValue = psiClass
+                .getAnnotation(DOMAIN_MODEL_CLASSNAME).findAttributeValue("primaryClass");
+        if(annotationMemberValue != null)
+            rawPrimaryTypeName = annotationMemberValue.getText();
+        String[] rawPrimaryTypePart = rawPrimaryTypeName.split("\\.");
+        String primaryTypeName = String.join(".",
+                Arrays.copyOfRange(rawPrimaryTypePart, 0, rawPrimaryTypePart.length - 1));
+
+        return PsiType.getTypeByName(primaryTypeName, project, GlobalSearchScope.allScope(project));
     }
 
 }
