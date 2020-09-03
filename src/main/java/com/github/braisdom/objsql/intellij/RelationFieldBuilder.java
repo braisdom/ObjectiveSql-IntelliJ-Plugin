@@ -16,8 +16,7 @@ final class RelationFieldBuilder {
         final Project project = psiClass.getProject();
         Collection<PsiField> fields = PsiClassUtil.collectClassFieldsIntern(psiClass);
         for (PsiField field : fields) {
-            PsiAnnotation annotation = field
-                    .getAnnotation(RELATION_ANNOTATION);
+            PsiAnnotation annotation = field.getAnnotation(RELATION_ANNOTATION);
             if (annotation != null) {
                 PsiType primaryType = PsiType.getTypeByName("com.github.braisdom.objsql.relation.Relationship", project, GlobalSearchScope.allScope(project));
                 String fieldName = genFieldName(field, annotation);

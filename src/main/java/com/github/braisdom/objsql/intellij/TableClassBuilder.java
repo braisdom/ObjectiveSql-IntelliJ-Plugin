@@ -4,14 +4,14 @@ import com.intellij.psi.*;
 import com.intellij.psi.impl.light.LightFieldBuilder;
 import com.intellij.psi.impl.light.LightModifierList;
 import com.intellij.psi.impl.light.LightPsiClassBuilder;
-import com.intellij.psi.search.GlobalSearchScope;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static com.github.braisdom.objsql.intellij.ObjSqlPsiAugmentProvider.*;
+import static com.github.braisdom.objsql.intellij.ObjSqlPsiAugmentProvider.getPrimaryName;
+import static com.github.braisdom.objsql.intellij.ObjSqlPsiAugmentProvider.getProjectType;
 
 final class TableClassBuilder {
 
