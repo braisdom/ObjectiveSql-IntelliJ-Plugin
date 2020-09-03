@@ -14,7 +14,7 @@ import static com.github.braisdom.objsql.intellij.PsiClassUtil.getProjectType;
 
 final class PersistenceMethodBuilder {
 
-    static void build(PsiClass psiClass, List result) {
+    static void buildMethod(PsiClass psiClass, List result) {
         buildCreatePersistence(psiClass.getProject(), psiClass, result);
         buildCreate(psiClass.getProject(), psiClass, result);
         buildCreateArray(psiClass.getProject(), psiClass, result);
@@ -25,6 +25,7 @@ final class PersistenceMethodBuilder {
         buildSave(psiClass.getProject(), psiClass, result);
         buildValidate(psiClass.getProject(), psiClass, result);
         buildExecute(psiClass.getProject(), psiClass, result);
+        buildNewInstanceFrom(psiClass.getProject(), psiClass, result);
     }
 
     private static void buildCreatePersistence(Project project, PsiClass psiClass, List result) {
@@ -146,6 +147,18 @@ final class PersistenceMethodBuilder {
                 .withContainingClass(psiClass)
                 .withModifier(PsiModifier.PUBLIC, PsiModifier.STATIC, PsiModifier.FINAL)
                 .withException(PsiClassType.getTypeByName("java.sql.SQLException", project, GlobalSearchScope.allScope(project)));
+
+        result.add(methodBuilder);
+    }
+
+    private static void buildNewInstanceFrom(Project project, PsiClass psiClass, List result) {
+        ObjSqlLightMethodBuilder methodBuilder = new ObjSqlLightMethodBuilder(psiClass.getManager(), "newInstanceFrom");
+        methodBuilder
+                .withParameter("properties", getProjectType("java.util.Map", project))
+                .withParameter("underLine", PsiType.BOOLEAN)
+                .withMethodReturnType(getProjectType(psiClass.getQualifiedName(), project))
+                .withContainingClass(psiClass)
+                .withModifier(PsiModifier.PUBLIC, PsiModifier.STATIC, PsiModifier.FINAL);
 
         result.add(methodBuilder);
     }

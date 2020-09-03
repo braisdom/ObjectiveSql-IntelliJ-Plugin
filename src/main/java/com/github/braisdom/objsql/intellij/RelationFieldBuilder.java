@@ -12,7 +12,7 @@ final class RelationFieldBuilder {
 
     private static final String RELATION_ANNOTATION = "com.github.braisdom.objsql.annotations.Relation";
 
-    static void build(PsiClass psiClass, List result) {
+    static void buildField(PsiClass psiClass, List result) {
         final Project project = psiClass.getProject();
         Collection<PsiField> fields = PsiClassUtil.collectClassFieldsIntern(psiClass);
         for (PsiField field : fields) {

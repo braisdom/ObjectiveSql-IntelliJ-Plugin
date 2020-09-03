@@ -13,7 +13,7 @@ import static com.github.braisdom.objsql.intellij.SetterGetterMethodBuilder.uppe
 
 final class PrimaryBuilder {
 
-    static void buildPrimaryField(PsiClass psiClass, List result) {
+    static void buildField(PsiClass psiClass, List result) {
         PsiType primaryType = getPrimaryType(psiClass);
         String primaryName = getPrimaryName(psiClass);
         LightFieldBuilder primaryBuilder = new LightFieldBuilder(primaryName, primaryType, psiClass);
@@ -23,7 +23,7 @@ final class PrimaryBuilder {
         result.add(primaryBuilder);
     }
 
-    static void build(PsiClass psiClass, List result) {
+    static void buildMethod(PsiClass psiClass, List result) {
         Project project = psiClass.getProject();
         PsiType primaryType = getPrimaryType(psiClass);
         String primaryName = getPrimaryName(psiClass);

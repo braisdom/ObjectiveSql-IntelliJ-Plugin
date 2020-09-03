@@ -12,7 +12,7 @@ import java.util.List;
 
 final class SetterGetterMethodBuilder {
 
-    static void build(PsiClass psiClass, List result) {
+    static void buildMethod(PsiClass psiClass, List result) {
         final Project project = psiClass.getProject();
         Collection<PsiField> fields =  PsiClassUtil.collectClassFieldsIntern(psiClass);
         for(PsiField field : fields) {

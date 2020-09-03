@@ -90,13 +90,13 @@ public class ObjSqlPsiAugmentProvider extends PsiAugmentProvider {
                 final List<Psi> result = new ArrayList<>();
 
                 if (type == PsiMethod.class) {
-                    SetterGetterMethodBuilder.build(psiClass, result);
-                    PrimaryBuilder.build(psiClass, result);
-                    QueryMethodBuilder.build(psiClass, result);
-                    PersistenceMethodBuilder.build(psiClass, result);
+                    SetterGetterMethodBuilder.buildMethod(psiClass, result);
+                    PrimaryBuilder.buildMethod(psiClass, result);
+                    QueryMethodBuilder.buildMethod(psiClass, result);
+                    PersistenceMethodBuilder.buildMethod(psiClass, result);
                 } else if(type == PsiField.class) {
-                    RelationFieldBuilder.build(psiClass, result);
-                    PrimaryBuilder.buildPrimaryField(psiClass, result);
+                    RelationFieldBuilder.buildField(psiClass, result);
+                    PrimaryBuilder.buildField(psiClass, result);
                 }
 
                 return Result.create(result, PsiModificationTracker.JAVA_STRUCTURE_MODIFICATION_COUNT);

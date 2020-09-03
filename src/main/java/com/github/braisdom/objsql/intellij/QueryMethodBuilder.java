@@ -13,7 +13,7 @@ import static com.github.braisdom.objsql.intellij.PsiClassUtil.getProjectType;
 
 final class QueryMethodBuilder {
 
-    static void build(PsiClass psiClass, List result) {
+    static void buildMethod(PsiClass psiClass, List result) {
         buildCreateQuery(psiClass.getProject(), psiClass, result);
     }
 
