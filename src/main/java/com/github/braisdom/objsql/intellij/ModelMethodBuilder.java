@@ -2,15 +2,13 @@ package com.github.braisdom.objsql.intellij;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiClassType;
 import com.intellij.psi.PsiModifier;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.impl.light.LightFieldBuilder;
-import com.intellij.psi.search.GlobalSearchScope;
 
 import java.util.List;
 
-import static com.github.braisdom.objsql.intellij.ObjSqlPsiAugmentProvider.createParameterInterfaceType;
+import static com.github.braisdom.objsql.intellij.ObjSqlPsiAugmentProvider.createParameterType;
 import static com.github.braisdom.objsql.intellij.ObjSqlPsiAugmentProvider.getProjectType;
 
 final class ModelMethodBuilder {
@@ -26,7 +24,7 @@ final class ModelMethodBuilder {
     }
 
     private static void buildRawAttributes(PsiClass psiClass, List result) {
-        PsiType fieldType = createParameterInterfaceType(psiClass.getProject(),
+        PsiType fieldType = createParameterType(psiClass.getProject(),
                 "java.util.Map", "java.lang.String", "java.lang.Object");
         LightFieldBuilder primaryBuilder = new LightFieldBuilder("rawAttributes", fieldType, psiClass);
         primaryBuilder.setModifiers(PsiModifier.PRIVATE, PsiModifier.FINAL);
@@ -36,7 +34,7 @@ final class ModelMethodBuilder {
     }
 
     private static void buildTableName(PsiClass psiClass, List result) {
-        PsiType fieldType = createParameterInterfaceType(psiClass.getProject(),
+        PsiType fieldType = createParameterType(psiClass.getProject(),
                 "java.util.Map", "java.lang.String", "java.lang.Object");
         LightFieldBuilder primaryBuilder = new LightFieldBuilder("TABLE_NAME", fieldType, psiClass);
         primaryBuilder.setModifiers(PsiModifier.PUBLIC, PsiModifier.STATIC, PsiModifier.FINAL);

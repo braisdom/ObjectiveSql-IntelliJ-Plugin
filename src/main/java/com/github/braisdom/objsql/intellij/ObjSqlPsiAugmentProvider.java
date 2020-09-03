@@ -134,7 +134,7 @@ public class ObjSqlPsiAugmentProvider extends PsiAugmentProvider {
                 project, GlobalSearchScope.allScope(project));
     }
 
-    static PsiType createParameterInterfaceType(Project project, String qName, String... parameters) {
+    static PsiType createParameterType(Project project, String qName, String... parameters) {
         PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
         PsiClassType classType = (PsiClassType) getProjectType(qName, project);
         List<PsiType> psiTypes = new ArrayList<>();
