@@ -1,7 +1,9 @@
 package com.github.braisdom.objsql.intellij;
 
+import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.PsiExtensibleClass;
+import com.intellij.psi.search.GlobalSearchScope;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -40,6 +42,11 @@ public class PsiClassUtil {
     } else {
       return filterPsiElements(psiClass, PsiField.class);
     }
+  }
+
+  public static PsiType getProjectType(String qName, Project project) {
+    return PsiType.getTypeByName(qName,
+            project, GlobalSearchScope.allScope(project));
   }
 
   /**
