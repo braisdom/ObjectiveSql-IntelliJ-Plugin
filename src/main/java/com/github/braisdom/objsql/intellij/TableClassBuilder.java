@@ -23,6 +23,11 @@ final class TableClassBuilder {
             public PsiField[] getFields() {
                 return psiFields.toArray(new PsiField[]{});
             }
+
+            @Override
+            public PsiFile getContainingFile() {
+                return psiClass.getContainingFile();
+            }
         };
         LightModifierList modifier = classBuilder.getModifierList();
 
@@ -30,10 +35,11 @@ final class TableClassBuilder {
         modifier.addModifier(PsiModifier.STATIC);
         modifier.addModifier(PsiModifier.FINAL);
         classBuilder.setContainingClass(psiClass);
+        classBuilder.setNavigationElement(psiClass);
         classBuilder.getExtendsList().addReference("com.github.braisdom.objsql.sql.AbstractTable");
         classBuilder.addMethod(createPrivateConstructor(psiClass, classBuilder));
 
-        buildTableFields(psiClass, psiFields);
+        buildTableFields(psiClass, classBuilder, psiFields);
 
         result.add(classBuilder);
     }
@@ -56,20 +62,20 @@ final class TableClassBuilder {
 
     private static PsiMethod createPrivateConstructor(PsiClass psiClass, PsiClass innerClass) {
         ObjSqlLightMethodBuilder methodBuilder = new ObjSqlLightMethodBuilder(psiClass.getManager(), innerClass.getName());
-        methodBuilder.withContainingClass(innerClass)
+        methodBuilder.withContainingClass(psiClass)
                 .withMethodReturnType(PsiType.VOID)
                 .withModifier(PsiModifier.PRIVATE)
                 .setConstructor(true);
         return methodBuilder;
     }
 
-    private static void buildTableFields(PsiClass psiClass, List<PsiField> psiFields) {
+    private static void buildTableFields(PsiClass psiClass, PsiClass innerClass, List<PsiField> psiFields) {
         Collection<PsiField> fields = PsiClassUtil.collectClassFieldsIntern(psiClass);
         for (PsiField field : fields) {
             PsiType fieldType = getProjectType("com.github.braisdom.objsql.sql.Column", psiClass.getProject());
             LightFieldBuilder fieldBuilder = new LightFieldBuilder(field.getName(), fieldType, psiClass);
-            fieldBuilder.setModifiers(PsiModifier.PUBLIC, PsiModifier.STATIC, PsiModifier.FINAL);
-            fieldBuilder.setContainingClass(psiClass);
+            fieldBuilder.setModifiers(PsiModifier.PUBLIC, PsiModifier.FINAL);
+            fieldBuilder.setContainingClass(innerClass);
 
             psiFields.add(fieldBuilder);
         }

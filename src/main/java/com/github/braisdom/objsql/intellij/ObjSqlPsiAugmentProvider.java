@@ -123,15 +123,18 @@ public class ObjSqlPsiAugmentProvider extends PsiAugmentProvider {
     static PsiType getPrimaryType(PsiClass psiClass) {
         Project project = psiClass.getProject();
         String rawPrimaryTypeName = "Integer.class";
-        PsiAnnotationMemberValue annotationMemberValue = psiClass
-                .getAnnotation(DOMAIN_MODEL_CLASSNAME).findAttributeValue("primaryClass");
-        if(annotationMemberValue != null)
-            rawPrimaryTypeName = annotationMemberValue.getText();
-        String[] rawPrimaryTypePart = rawPrimaryTypeName.split("\\.");
-        String primaryTypeName = String.join(".",
-                Arrays.copyOfRange(rawPrimaryTypePart, 0, rawPrimaryTypePart.length - 1));
+        PsiAnnotation annotation = psiClass.getAnnotation(DOMAIN_MODEL_CLASSNAME);
+        if(annotation != null) {
+            PsiAnnotationMemberValue annotationMemberValue = annotation.findAttributeValue("primaryClass");
+            if (annotationMemberValue != null)
+                rawPrimaryTypeName = annotationMemberValue.getText();
+            String[] rawPrimaryTypePart = rawPrimaryTypeName.split("\\.");
+            String primaryTypeName = String.join(".",
+                    Arrays.copyOfRange(rawPrimaryTypePart, 0, rawPrimaryTypePart.length - 1));
 
-        return PsiType.getTypeByName(primaryTypeName, project, GlobalSearchScope.allScope(project));
+            return PsiType.getTypeByName(primaryTypeName, project, GlobalSearchScope.allScope(project));
+        } else
+            return PsiType.getTypeByName("java.lang.Integer", project, GlobalSearchScope.allScope(project));
     }
 
     static PsiType getProjectType(String qName, Project project) {
