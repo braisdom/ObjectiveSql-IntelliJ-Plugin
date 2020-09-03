@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static com.github.braisdom.objsql.intellij.ObjSqlPsiAugmentProvider.getProjectType;
+import static com.github.braisdom.objsql.intellij.ObjSqlPsiAugmentProvider.*;
 
 final class TableClassBuilder {
 
@@ -40,6 +40,7 @@ final class TableClassBuilder {
         classBuilder.addMethod(createPrivateConstructor(psiClass, classBuilder));
 
         buildTableFields(psiClass, classBuilder, psiFields);
+        buildPrimaryField(psiClass, classBuilder, psiFields);
 
         result.add(classBuilder);
     }
@@ -69,15 +70,30 @@ final class TableClassBuilder {
         return methodBuilder;
     }
 
+    private static void buildPrimaryField(PsiClass psiClass, PsiClass innerClass, List<PsiField> psiFields) {
+        PsiType fieldType = getProjectType("com.github.braisdom.objsql.sql.Column", psiClass.getProject());
+        String primaryName = getPrimaryName(psiClass);
+
+        LightFieldBuilder fieldBuilder = new LightFieldBuilder(primaryName, fieldType, psiClass);
+        fieldBuilder.setModifiers(PsiModifier.PUBLIC, PsiModifier.FINAL);
+        fieldBuilder.setContainingClass(innerClass);
+
+        psiFields.add(fieldBuilder);
+    }
+
     private static void buildTableFields(PsiClass psiClass, PsiClass innerClass, List<PsiField> psiFields) {
         Collection<PsiField> fields = PsiClassUtil.collectClassFieldsIntern(psiClass);
         for (PsiField field : fields) {
-            PsiType fieldType = getProjectType("com.github.braisdom.objsql.sql.Column", psiClass.getProject());
-            LightFieldBuilder fieldBuilder = new LightFieldBuilder(field.getName(), fieldType, psiClass);
-            fieldBuilder.setModifiers(PsiModifier.PUBLIC, PsiModifier.FINAL);
-            fieldBuilder.setContainingClass(innerClass);
+            PsiAnnotation transientAnn = field.getAnnotation("com.github.braisdom.objsql.annotations.Transient");
+            PsiAnnotation relationAnn = field.getAnnotation("com.github.braisdom.objsql.annotations.Relation");
+            if(transientAnn == null && relationAnn == null) {
+                PsiType fieldType = getProjectType("com.github.braisdom.objsql.sql.Column", psiClass.getProject());
+                LightFieldBuilder fieldBuilder = new LightFieldBuilder(field.getName(), fieldType, psiClass);
+                fieldBuilder.setModifiers(PsiModifier.PUBLIC, PsiModifier.FINAL);
+                fieldBuilder.setContainingClass(innerClass);
 
-            psiFields.add(fieldBuilder);
+                psiFields.add(fieldBuilder);
+            }
         }
     }
 }
