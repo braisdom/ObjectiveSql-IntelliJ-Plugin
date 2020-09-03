@@ -97,6 +97,7 @@ public class ObjSqlPsiAugmentProvider extends PsiAugmentProvider {
                     QueryMethodBuilder.buildMethod(psiClass, result);
                     PersistenceMethodBuilder.buildMethod(psiClass, result);
                     ModelMethodBuilder.buildMethod(psiClass, result);
+                    TableClassBuilder.buildMethod(psiClass, result);
                 } else if(type == PsiField.class) {
                     RelationFieldBuilder.buildField(psiClass, result);
                     PrimaryBuilder.buildField(psiClass, result);
