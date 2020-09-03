@@ -22,6 +22,7 @@ final class ModelMethodBuilder {
 
     static void buildMethod(PsiClass psiClass, List result) {
         buildGetRawAttributes(psiClass, result);
+        buildGetRawAttribute(psiClass, result);
     }
 
     private static void buildRawAttributes(PsiClass psiClass, List result) {
@@ -49,6 +50,18 @@ final class ModelMethodBuilder {
         ObjSqlLightMethodBuilder methodBuilder = new ObjSqlLightMethodBuilder(psiClass.getManager(), "getRawAttributes");
         PsiType psiType = getProjectType("java.util.Map", project);
         methodBuilder.withMethodReturnType(psiType)
+                .withContainingClass(psiClass)
+                .withModifier(PsiModifier.PUBLIC, PsiModifier.FINAL);
+
+        result.add(methodBuilder);
+    }
+
+    private static void buildGetRawAttribute(PsiClass psiClass, List result) {
+        Project project = psiClass.getProject();
+        ObjSqlLightMethodBuilder methodBuilder = new ObjSqlLightMethodBuilder(psiClass.getManager(), "getRawAttribute");
+        PsiType psiType = getProjectType("java.lang.Object", project);
+        methodBuilder.withParameter("key", "java.lang.String")
+                .withMethodReturnType(psiType)
                 .withContainingClass(psiClass)
                 .withModifier(PsiModifier.PUBLIC, PsiModifier.FINAL);
 

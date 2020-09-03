@@ -15,12 +15,25 @@ final class QueryMethodBuilder {
 
     static void buildMethod(PsiClass psiClass, List result) {
         buildCreateQuery(psiClass.getProject(), psiClass, result);
+        buildCount(psiClass.getProject(), psiClass, result);
     }
 
     private static void buildCreateQuery(Project project, PsiClass psiClass, List result) {
         ObjSqlLightMethodBuilder methodBuilder = new ObjSqlLightMethodBuilder(psiClass.getManager(), "createQuery");
         PsiType psiType = getProjectType("com.github.braisdom.objsql.Query", project);
         methodBuilder.withMethodReturnType(psiType)
+                .withContainingClass(psiClass)
+                .withModifier(PsiModifier.PUBLIC, PsiModifier.STATIC, PsiModifier.FINAL)
+                .withException(PsiClassType.getTypeByName("java.sql.SQLException", project, GlobalSearchScope.allScope(project)));
+
+        result.add(methodBuilder);
+    }
+
+    private static void buildCount(Project project, PsiClass psiClass, List result) {
+        ObjSqlLightMethodBuilder methodBuilder = new ObjSqlLightMethodBuilder(psiClass.getManager(), "count");
+        methodBuilder.withParameter("predicate", "java.lang.String")
+                .withParameter("args", "java.lang.Object", true)
+                .withMethodReturnType(PsiType.INT)
                 .withContainingClass(psiClass)
                 .withModifier(PsiModifier.PUBLIC, PsiModifier.STATIC, PsiModifier.FINAL)
                 .withException(PsiClassType.getTypeByName("java.sql.SQLException", project, GlobalSearchScope.allScope(project)));

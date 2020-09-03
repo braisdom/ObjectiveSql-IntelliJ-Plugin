@@ -58,8 +58,18 @@ public class ObjSqlLightMethodBuilder extends LightMethodBuilder {
     return this;
   }
 
+  public ObjSqlLightMethodBuilder withParameter(@NotNull String name, @NotNull String type) {
+    addParameter(name, type);
+    return this;
+  }
+
   public ObjSqlLightMethodBuilder withParameter(@NotNull String name, @NotNull PsiType type, boolean isVarArgs) {
     addParameter(name, type, isVarArgs);
+    return this;
+  }
+
+  public ObjSqlLightMethodBuilder withParameter(@NotNull String name, @NotNull String type, boolean isVarArgs) {
+    addParameter(name, JavaPsiFacade.getElementFactory(getProject()).createTypeFromText(type, this), isVarArgs);
     return this;
   }
 
