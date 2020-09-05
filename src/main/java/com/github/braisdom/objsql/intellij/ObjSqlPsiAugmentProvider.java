@@ -42,9 +42,9 @@ public class ObjSqlPsiAugmentProvider extends PsiAugmentProvider {
         final List<Psi> cachedValue;
         if (type == PsiMethod.class)
             cachedValue = CachedValuesManager.getCachedValue(element, new MethodCachedValueProvider<>(type, psiClass));
-        else if(type == PsiField.class)
+        else if (type == PsiField.class)
             cachedValue = CachedValuesManager.getCachedValue(element, new FieldCachedValueProvider<>(type, psiClass));
-        else if(type == PsiClass.class)
+        else if (type == PsiClass.class)
             cachedValue = CachedValuesManager.getCachedValue(element, new ClassCachedValueProvider<>(type, psiClass));
         else return result;
 
@@ -98,11 +98,11 @@ public class ObjSqlPsiAugmentProvider extends PsiAugmentProvider {
                     PersistenceMethodBuilder.buildMethod(psiClass, result);
                     ModelMethodBuilder.buildMethod(psiClass, result);
                     TableClassBuilder.buildMethod(psiClass, result);
-                } else if(type == PsiField.class) {
+                } else if (type == PsiField.class) {
                     RelationFieldBuilder.buildField(psiClass, result);
                     PrimaryBuilder.buildField(psiClass, result);
                     ModelMethodBuilder.buildField(psiClass, result);
-                } else if(type == PsiClass.class) {
+                } else if (type == PsiClass.class) {
                     TableClassBuilder.buildClass(psiClass, result);
                 }
 
@@ -112,12 +112,14 @@ public class ObjSqlPsiAugmentProvider extends PsiAugmentProvider {
     }
 
     static String getPrimaryName(PsiClass psiClass) {
-        PsiAnnotation annotation =  psiClass.getAnnotation(DOMAIN_MODEL_CLASSNAME);
-        if(annotation == null)
+        PsiAnnotation annotation = psiClass.getAnnotation(DOMAIN_MODEL_CLASSNAME);
+        if (annotation == null)
             return "id";
         else {
             PsiAnnotationMemberValue annotationMemberValue = annotation.findAttributeValue("primaryFieldName");
-            return annotationMemberValue.getText().replaceAll("^\"|\"$", "");
+            if(annotationMemberValue != null)
+                return annotationMemberValue.getText().replaceAll("^\"|\"$", "");
+            else return null;
         }
     }
 
@@ -125,14 +127,14 @@ public class ObjSqlPsiAugmentProvider extends PsiAugmentProvider {
         Project project = psiClass.getProject();
         String rawPrimaryTypeName = "Integer";
         PsiAnnotation annotation = psiClass.getAnnotation(DOMAIN_MODEL_CLASSNAME);
-        if(annotation != null) {
+        if (annotation != null) {
             PsiAnnotationMemberValue annotationMemberValue = annotation.findAttributeValue("primaryClass");
             if (annotationMemberValue != null)
                 rawPrimaryTypeName = annotationMemberValue.getText();
             String[] rawPrimaryTypePart = rawPrimaryTypeName.split("\\.");
             String primaryTypeName = String.join(".",
                     Arrays.copyOfRange(rawPrimaryTypePart, 0, rawPrimaryTypePart.length - 1));
-            if(!primaryTypeName.startsWith("java.lang"))
+            if (!primaryTypeName.startsWith("java.lang"))
                 primaryTypeName = String.format("java.lang.%s", primaryTypeName);
 
             return PsiType.getTypeByName(primaryTypeName, project, GlobalSearchScope.allScope(project));
@@ -146,12 +148,18 @@ public class ObjSqlPsiAugmentProvider extends PsiAugmentProvider {
     }
 
     static PsiType createParameterType(Project project, String qName, String... parameters) {
+        return createParameterType(project, (PsiClassType) getProjectType(qName, project), parameters);
+    }
+
+    static PsiType createParameterType(Project project, PsiClassType classType, String... parameters) {
         PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
-        PsiClassType classType = (PsiClassType) getProjectType(qName, project);
-        List<PsiType> psiTypes = new ArrayList<>();
-        for(String parameter : parameters)
-            psiTypes.add(getProjectType(parameter, project));
-        return factory.createType(classType.resolve(), psiTypes.toArray(new PsiType[]{}));
+        PsiClass psiClass = classType.resolve();
+        if (psiClass.getTypeParameters().length == parameters.length) {
+            List<PsiType> psiTypes = new ArrayList<>();
+            for (String parameter : parameters)
+                psiTypes.add(getProjectType(parameter, project));
+            return factory.createType(classType.resolve(), psiTypes.toArray(new PsiType[]{}));
+        } else return null;
     }
 
 }

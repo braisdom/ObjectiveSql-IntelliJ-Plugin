@@ -20,12 +20,13 @@ final class RelationFieldBuilder {
             if (annotation != null) {
                 PsiType primaryType = PsiType.getTypeByName("com.github.braisdom.objsql.relation.Relationship", project, GlobalSearchScope.allScope(project));
                 String fieldName = genFieldName(field, annotation);
+                if(fieldName != null) {
+                    LightFieldBuilder primaryBuilder = new LightFieldBuilder(fieldName, primaryType, psiClass);
+                    primaryBuilder.setModifiers(PsiModifier.PUBLIC, PsiModifier.FINAL, PsiModifier.STATIC);
+                    primaryBuilder.setContainingClass(psiClass);
 
-                LightFieldBuilder primaryBuilder = new LightFieldBuilder(fieldName, primaryType, psiClass);
-                primaryBuilder.setModifiers(PsiModifier.PUBLIC, PsiModifier.FINAL, PsiModifier.STATIC);
-                primaryBuilder.setContainingClass(psiClass);
-
-                result.add(primaryBuilder);
+                    result.add(primaryBuilder);
+                }
             }
         }
     }

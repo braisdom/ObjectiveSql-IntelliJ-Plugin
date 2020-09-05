@@ -87,11 +87,11 @@ final class TableClassBuilder {
             PsiAnnotation transientAnn = field.getAnnotation("com.github.braisdom.objsql.annotations.Transient");
             PsiAnnotation relationAnn = field.getAnnotation("com.github.braisdom.objsql.annotations.Relation");
             if(transientAnn == null && relationAnn == null) {
-                PsiType fieldType = getProjectType("com.github.braisdom.objsql.sql.Column", psiClass.getProject());
-                LightFieldBuilder fieldBuilder = new LightFieldBuilder(field.getName(), fieldType, psiClass);
+                PsiClassType columnClassType = (PsiClassType) getProjectType("com.github.braisdom.objsql.sql.Column",
+                        psiClass.getProject());
+                LightFieldBuilder fieldBuilder = new LightFieldBuilder(field.getName(), columnClassType, psiClass);
                 fieldBuilder.setModifiers(PsiModifier.PUBLIC, PsiModifier.FINAL);
                 fieldBuilder.setContainingClass(innerClass);
-
                 psiFields.add(fieldBuilder);
             }
         }
