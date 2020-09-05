@@ -74,11 +74,13 @@ final class TableClassBuilder {
         PsiType fieldType = getProjectType("com.github.braisdom.objsql.sql.Column", psiClass.getProject());
         String primaryName = getPrimaryName(psiClass);
 
-        LightFieldBuilder fieldBuilder = new LightFieldBuilder(primaryName, fieldType, psiClass);
-        fieldBuilder.setModifiers(PsiModifier.PUBLIC, PsiModifier.FINAL);
-        fieldBuilder.setContainingClass(innerClass);
+        if(primaryName != null) {
+            LightFieldBuilder fieldBuilder = new LightFieldBuilder(primaryName, fieldType, psiClass);
+            fieldBuilder.setModifiers(PsiModifier.PUBLIC, PsiModifier.FINAL);
+            fieldBuilder.setContainingClass(innerClass);
 
-        psiFields.add(fieldBuilder);
+            psiFields.add(fieldBuilder);
+        }
     }
 
     private static void buildTableFields(PsiClass psiClass, PsiClass innerClass, List<PsiField> psiFields) {
