@@ -20,6 +20,7 @@ final class QueryMethodBuilder {
         buildQuery3(psiClass.getProject(), psiClass, result);
         buildQueryFirst(psiClass.getProject(), psiClass, result);
         buildQueryFirst2(psiClass.getProject(), psiClass, result);
+        buildQueryAll(psiClass.getProject(), psiClass, result);
         buildQueryableField(psiClass.getProject(), psiClass, result);
     }
 
@@ -79,6 +80,18 @@ final class QueryMethodBuilder {
         PsiType returnType = createParameterType(project, "java.util.List", psiClass.getQualifiedName());
         methodBuilder.withParameter("predicate", "java.lang.String")
                 .withParameter("args", "java.lang.Object", true)
+                .withMethodReturnType(returnType)
+                .withContainingClass(psiClass)
+                .withModifier(PsiModifier.PUBLIC, PsiModifier.STATIC, PsiModifier.FINAL)
+                .withException(PsiClassType.getTypeByName("java.sql.SQLException", project, GlobalSearchScope.allScope(project)));
+
+        result.add(methodBuilder);
+    }
+
+    private static void buildQueryAll(Project project, PsiClass psiClass, List result) {
+        ObjSqlLightMethodBuilder methodBuilder = new ObjSqlLightMethodBuilder(psiClass.getManager(), "queryAll");
+        PsiType returnType = createParameterType(project, "java.util.List", psiClass.getQualifiedName());
+        methodBuilder.withParameter("relations", "com.github.braisdom.objsql.relation.Relationship", true)
                 .withMethodReturnType(returnType)
                 .withContainingClass(psiClass)
                 .withModifier(PsiModifier.PUBLIC, PsiModifier.STATIC, PsiModifier.FINAL)

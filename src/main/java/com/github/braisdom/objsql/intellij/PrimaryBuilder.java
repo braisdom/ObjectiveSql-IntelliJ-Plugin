@@ -35,6 +35,7 @@ final class PrimaryBuilder {
 
         ObjSqlLightMethodBuilder setterMethodBuilder = new ObjSqlLightMethodBuilder(psiClass.getManager(), setterName);
         ObjSqlLightMethodBuilder getterMethodBuilder = new ObjSqlLightMethodBuilder(psiClass.getManager(), getterName);
+        ObjSqlLightMethodBuilder queryByPrimaryBuilder = new ObjSqlLightMethodBuilder(psiClass.getManager(), "queryByPrimary");
 
         setterMethodBuilder.withParameter(primaryName, primaryType)
                 .withMethodReturnType(PsiType.getTypeByName(psiClass.getQualifiedName(),
@@ -42,11 +43,18 @@ final class PrimaryBuilder {
                 .withContainingClass(psiClass)
                 .withModifier(PsiModifier.PUBLIC);
 
+        queryByPrimaryBuilder.withParameter(primaryName, primaryType)
+                .withMethodReturnType(PsiType.getTypeByName(psiClass.getQualifiedName(),
+                        project, GlobalSearchScope.allScope(project)))
+                .withContainingClass(psiClass)
+                .withModifier(PsiModifier.PUBLIC, PsiModifier.STATIC, PsiModifier.FINAL);
+
         getterMethodBuilder.withMethodReturnType(primaryType)
                 .withContainingClass(psiClass)
                 .withModifier(PsiModifier.PUBLIC);
 
         result.add(setterMethodBuilder);
         result.add(getterMethodBuilder);
+        result.add(queryByPrimaryBuilder);
     }
 }
