@@ -9,10 +9,10 @@
 
         <b>Changes in version 1.0:</b>
         <ul>
-          <li>The setter and getter methods for DomainModel instance</li>
-          <li>The query and persistence methods for DomainModel</li>
-          <li>The transaction methods for DomainModel</li>
-        </ul><br>
+          <li>Feature: The setter and getter methods for DomainModel instance</li>
+          <li>Feature: The query and persistence methods for DomainModel</li>
+          <li>Feature: The transaction methods for DomainModel</li>
+        </ul>
         </html>
         ]]>
     </change-notes>
