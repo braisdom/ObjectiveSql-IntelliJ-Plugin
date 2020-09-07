@@ -3,16 +3,16 @@
     <name>ObjectiveSql</name>
     <vendor email="wangyonghe@msn.com" url="http://www.objectsql.com">Braisdom</vendor>
     <version>1.0</version>
+    <idea-version since-build="145.0" until-build="191.*"/>
     <description><![CDATA[Filling the generated elements for ObjectSql]]></description>
     <change-notes><![CDATA[
         <html>
-
         <b>Changes in version 1.0:</b>
         <ul>
           <li>Feature: The setter and getter methods for DomainModel instance</li>
           <li>Feature: The query and persistence methods for DomainModel</li>
           <li>Feature: The transaction methods for DomainModel</li>
-        </ul>
+        </ul><br>
         </html>
         ]]>
     </change-notes>
