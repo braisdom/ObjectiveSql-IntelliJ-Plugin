@@ -1,10 +1,21 @@
 <idea-plugin>
     <id>com.github.braisdom.object-sql-intellij</id>
-    <name>ObjectSQL</name>
+    <name>ObjectiveSql</name>
     <vendor email="wangyonghe@msn.com" url="http://www.objectsql.com">Braisdom</vendor>
     <version>1.0</version>
     <description><![CDATA[Filling the generated elements for ObjectSql]]></description>
-    <change-notes><![CDATA[ The first release for ObjectiveSQL ]]></change-notes>
+    <change-notes><![CDATA[
+        <html>
+
+        <b>Changes in version 1.0:</b>
+        <ul>
+          <li>The setter and getter methods for DomainModel instance</li>
+          <li>The query and persistence methods for DomainModel</li>
+          <li>The transaction methods for DomainModel</li>
+        </ul><br>
+        </html>
+        ]]>
+    </change-notes>
 
     <depends>com.intellij.modules.lang</depends>
     <depends>com.intellij.modules.platform</depends>
