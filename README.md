@@ -7,10 +7,10 @@ Download [ObjectiveSql](./doc/object-sql-intellij-1.0.zip) and [Perference... ->
 
 <img src="./doc/install.png" alt="static_methods" />
 
-## Static members
+## Static members example
 
 <img src="./doc/static_methods.png" alt="static_methods" />
 
-## Instance members
+## Instance members example
 
 <img src="./doc/instance_methods.png" alt="instance_methods" />
