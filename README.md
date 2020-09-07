@@ -1,5 +1,5 @@
-# ObjectSql-IntelliJ-Plugin
-Fill the generated elements for ObjectSql
+# ObjectiveSql IntelliJ Plugin
+Fill the generated elements for ObjectSql, and the plugin name of IntelliJ is ObjectiveSql
 
 ## Static members
 
