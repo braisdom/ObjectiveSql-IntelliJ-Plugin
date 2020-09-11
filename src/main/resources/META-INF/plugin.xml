@@ -5,9 +5,7 @@
     <version>1.0</version>
     <idea-version since-build="181.00"/>
     <category>Tools Integration</category>
-    <description><![CDATA[
-        Filling the generated elements for ObjectSql
-    ]]></description>
+    <description>Filling the generated elements for ObjectSql</description>
 
     <depends>com.intellij.modules.lang</depends>
     <depends>com.intellij.modules.platform</depends>
