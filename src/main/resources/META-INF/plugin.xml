@@ -1,11 +1,12 @@
 <idea-plugin>
     <id>com.github.braisdom.object-sql-intellij</id>
     <name>ObjectiveSql</name>
-    <vendor email="wangyonghe@msn.com" url="http://www.objectsql.com">Braisdom</vendor>
+    <vendor email="wangyonghe@msn.com" url="http://www.objsql.com">ObjectiveSql</vendor>
     <version>1.0</version>
     <idea-version since-build="181.00"/>
     <category>Tools Integration</category>
     <description>Filling the generated elements for ObjectSql</description>
+    <change-notes>Generate the setter and getter methods, and query and persistence methods</change-notes>
 
     <depends>com.intellij.modules.lang</depends>
     <depends>com.intellij.modules.platform</depends>
