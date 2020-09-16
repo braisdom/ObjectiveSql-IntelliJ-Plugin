@@ -50,6 +50,9 @@ intellij {
 
 patchPluginXml {
     changeNotes """
-      Add change notes here.<br>
-      <em>most HTML tags may be used</em>"""
+      <p>1. Generating setter and getter methods for model who has annotation @DomainModel</p>
+        <p>2. Generating query and persistence methods for model who has annotation @DomainModel</p>
+        <p>3. Generating query method for field who has annotation @Queryable</p>
+        <p>4. Generating relation method for field who has annotation @Relation</p>
+        <p>...</p>"""
 }

@@ -5,8 +5,24 @@
     <version>1.0</version>
     <idea-version since-build="181.00"/>
     <category>Tools Integration</category>
-    <description>Filling the generated elements for ObjectSql</description>
+    <description><![CDATA[
+        <p> Filling the generated elements for ObjectSql, Discuss, review, and share code with your
+            team in your JetBrains. The source code suggestion will be supported in the IntelliJ and the
+            compile error of auto-generated code will be suppressed.</p>
+        <p>Supported annotations of ObjectiveSql:</p>
+        <ul>
+            <li>@DomainModel</li>
+            <li>@Column</li>
+            <li>@PrimaryKey</li>
+            <li>@Queryable</li>
+            <li>@Transactional</li>
+            <li>@Relation</li>
+            <li>@Transient</li>
+        </ul>
+        <p>The </p>
+    ]]></description>
     <change-notes><![CDATA[
+        <p>V1.0</p>
         <p>1. Generating setter and getter methods for model who has annotation @DomainModel</p>
         <p>2. Generating query and persistence methods for model who has annotation @DomainModel</p>
         <p>3. Generating query method for field who has annotation @Queryable</p>
