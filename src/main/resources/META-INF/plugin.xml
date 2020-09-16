@@ -19,7 +19,7 @@
             <li>@Relation</li>
             <li>@Transient</li>
         </ul>
-        <p>The </p>
+        <p>See more: <a href="http://www.objsq.com">ObjectiveSql</a> </p>
     ]]></description>
     <change-notes><![CDATA[
         <p>V1.0</p>
