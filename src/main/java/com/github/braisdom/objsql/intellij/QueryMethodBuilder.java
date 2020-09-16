@@ -134,10 +134,19 @@ final class QueryMethodBuilder {
             PsiAnnotation annotation = field
                     .getAnnotation("com.github.braisdom.objsql.annotations.Queryable");
             if(annotation != null) {
+                Boolean returnsMany = Boolean.parseBoolean(annotation.findAttributeValue("many").getText());
                 String methodName = WordUtil.camelize(String.format("%s_%s", "queryBy", field.getName()), true);
                 ObjSqlLightMethodBuilder methodBuilder = new ObjSqlLightMethodBuilder(psiClass.getManager(), methodName);
-                PsiType returnType = createParameterType(project, "java.util.List", psiClass.getQualifiedName());
+
+                PsiType returnType;
+                if(returnsMany)
+                    returnType = createParameterType(project, "java.util.List", psiClass.getQualifiedName());
+                else
+                    returnType = createParameterType(project, psiClass.getQualifiedName());
+
+
                 methodBuilder.withParameter("value", field.getType())
+                        .withParameter("name", "com.github.braisdom.objsql.relation.Relationship", true)
                         .withMethodReturnType(returnType)
                         .withContainingClass(psiClass)
                         .withModifier(PsiModifier.PUBLIC, PsiModifier.STATIC, PsiModifier.FINAL)
