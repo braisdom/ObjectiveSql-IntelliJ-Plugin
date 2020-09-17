@@ -250,9 +250,4 @@ public class ObjSqlLightMethodBuilder extends LightMethodBuilder {
   public void delete() throws IncorrectOperationException {
     // simple do nothing
   }
-
-  @Override
-  public void checkDelete() throws IncorrectOperationException {
-    // simple do nothing
-  }
 }

@@ -24,11 +24,9 @@ public class ObjSqlImplicitUsageProvider implements ImplicitUsageProvider {
     }
 
     private boolean checkUsage(PsiElement element) {
-        boolean result = false;
         if (element instanceof PsiField) {
             PsiClass psiClass = ((PsiField)element).getContainingClass();
-            PsiAnnotation annotation = psiClass.getAnnotation(ObjSqlPsiAugmentProvider.DOMAIN_MODEL_CLASSNAME);
-            return annotation != null;
+            return psiClass.hasAnnotation(ObjSqlPsiAugmentProvider.DOMAIN_MODEL_CLASSNAME);
         }
         return false;
     }

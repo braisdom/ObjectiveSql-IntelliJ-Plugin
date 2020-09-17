@@ -106,14 +106,14 @@ public class ObjSqlPsiAugmentProvider extends PsiAugmentProvider {
                     TableClassBuilder.buildClass(psiClass, result);
                 }
 
-                return Result.create(result, PsiModificationTracker.JAVA_STRUCTURE_MODIFICATION_COUNT);
+                return Result.create(result, PsiModificationTracker.MODIFICATION_COUNT);
             });
         }
     }
 
     static String getPrimaryName(PsiClass psiClass) {
         PsiAnnotation annotation = psiClass.getAnnotation(DOMAIN_MODEL_CLASSNAME);
-        if (annotation == null)
+        if (psiClass.hasAnnotation(DOMAIN_MODEL_CLASSNAME))
             return "id";
         else {
             PsiAnnotationMemberValue annotationMemberValue = annotation.findAttributeValue("primaryFieldName");
