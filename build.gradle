@@ -37,7 +37,7 @@ apply plugin: 'org.jetbrains.intellij'
 intellij {
     version = "2019.1"
     type = 'IC'
-    updateSinceUntilBuild = true
+    updateSinceUntilBuild = false
     downloadSources = true
     publish {
         username = project.hasProperty('jetbrainsUser')    \

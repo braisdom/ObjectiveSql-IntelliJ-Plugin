@@ -134,7 +134,8 @@ final class QueryMethodBuilder {
             PsiAnnotation annotation = field
                     .getAnnotation("com.github.braisdom.objsql.annotations.Queryable");
             if(annotation != null) {
-                Boolean returnsMany = Boolean.parseBoolean(annotation.findAttributeValue("many").getText());
+                PsiAnnotationMemberValue rawManyValue = annotation.findAttributeValue("many");
+                Boolean returnsMany = rawManyValue == null ? false : Boolean.parseBoolean(rawManyValue.getText());
                 String methodName = WordUtil.camelize(String.format("%s_%s", "queryBy", field.getName()), true);
                 ObjSqlLightMethodBuilder methodBuilder = new ObjSqlLightMethodBuilder(psiClass.getManager(), methodName);
 

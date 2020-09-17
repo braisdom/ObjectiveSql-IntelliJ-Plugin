@@ -1,10 +1,7 @@
 package com.github.braisdom.objsql.intellij;
 
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiModifier;
-import com.intellij.psi.PsiType;
+import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 
 import java.util.Collection;
@@ -14,26 +11,29 @@ final class SetterGetterMethodBuilder {
 
     static void buildMethod(PsiClass psiClass, List result) {
         final Project project = psiClass.getProject();
-        Collection<PsiField> fields =  PsiClassUtil.collectClassFieldsIntern(psiClass);
-        for(PsiField field : fields) {
+        Collection<PsiField> fields = PsiClassUtil.collectClassFieldsIntern(psiClass);
+        for (PsiField field : fields) {
             String setterName = String.format("set%s", upperFirstChar(field.getName()));
             String getterName = String.format("%s%s", isBoolean(field.getType()) ? "is" : "get",
                     upperFirstChar(field.getName()));
             ObjSqlLightMethodBuilder setterMethodBuilder = new ObjSqlLightMethodBuilder(psiClass.getManager(), setterName);
             ObjSqlLightMethodBuilder getterMethodBuilder = new ObjSqlLightMethodBuilder(psiClass.getManager(), getterName);
 
-            setterMethodBuilder.withParameter(field.getName(), field.getType())
-                    .withMethodReturnType(PsiType.getTypeByName(psiClass.getQualifiedName(),
-                            project, GlobalSearchScope.allScope(project)))
-                    .withContainingClass(psiClass)
-                    .withModifier(PsiModifier.PUBLIC);
+            if (!checkMethodExists(psiClass, setterName, 1)) {
+                setterMethodBuilder.withParameter(field.getName(), field.getType())
+                        .withMethodReturnType(PsiType.getTypeByName(psiClass.getQualifiedName(),
+                                project, GlobalSearchScope.allScope(project)))
+                        .withContainingClass(psiClass)
+                        .withModifier(PsiModifier.PUBLIC);
+                result.add(setterMethodBuilder);
+            }
 
-            getterMethodBuilder.withMethodReturnType(field.getType())
-                    .withContainingClass(psiClass)
-                    .withModifier(PsiModifier.PUBLIC);
-
-            result.add(setterMethodBuilder);
-            result.add(getterMethodBuilder);
+            if (!checkMethodExists(psiClass, getterName, 0)) {
+                getterMethodBuilder.withMethodReturnType(field.getType())
+                        .withContainingClass(psiClass)
+                        .withModifier(PsiModifier.PUBLIC);
+                result.add(getterMethodBuilder);
+            }
         }
     }
 
@@ -49,5 +49,14 @@ final class SetterGetterMethodBuilder {
             ch[0] = (char) (ch[0] - 32);
         }
         return new String(ch);
+    }
+
+    private static boolean checkMethodExists(PsiClass psiClass, String methodName, int parameterCount) {
+        PsiMethod[] methods = psiClass.findMethodsByName(methodName, true);
+        for (PsiMethod method : methods) {
+            if (method.getParameters().length == parameterCount)
+                return true;
+        }
+        return false;
     }
 }
