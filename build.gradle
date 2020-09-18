@@ -35,7 +35,7 @@ compileJava {
 
 apply plugin: 'org.jetbrains.intellij'
 intellij {
-    version = "2019.1"
+    version = "2018.2"
     type = 'IC'
     updateSinceUntilBuild = false
     downloadSources = true
