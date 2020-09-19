@@ -26,6 +26,8 @@ final class PersistenceMethodBuilder {
         buildValidate(psiClass.getProject(), psiClass, result);
         buildExecute(psiClass.getProject(), psiClass, result);
         buildNewInstanceFrom(psiClass.getProject(), psiClass, result);
+        buildNewInstance2From(psiClass.getProject(), psiClass, result);
+        buildNewInstance3From(psiClass.getProject(), psiClass, result);
     }
 
     private static void buildCreatePersistence(Project project, PsiClass psiClass, List result) {
@@ -156,6 +158,30 @@ final class PersistenceMethodBuilder {
         methodBuilder
                 .withParameter("properties", getProjectType("java.util.Map", project))
                 .withParameter("underLine", PsiType.BOOLEAN)
+                .withParameter("converter", getProjectType("com.github.braisdom.objsql.ForcedFieldValueConverter", project))
+                .withMethodReturnType(getProjectType(psiClass.getQualifiedName(), project))
+                .withContainingClass(psiClass)
+                .withModifier(PsiModifier.PUBLIC, PsiModifier.STATIC, PsiModifier.FINAL);
+
+        result.add(methodBuilder);
+    }
+
+    private static void buildNewInstance2From(Project project, PsiClass psiClass, List result) {
+        ObjSqlLightMethodBuilder methodBuilder = new ObjSqlLightMethodBuilder(psiClass.getManager(), "newInstanceFrom");
+        methodBuilder
+                .withParameter("properties", getProjectType("java.util.Map", project))
+                .withParameter("underLine", PsiType.BOOLEAN)
+                .withMethodReturnType(getProjectType(psiClass.getQualifiedName(), project))
+                .withContainingClass(psiClass)
+                .withModifier(PsiModifier.PUBLIC, PsiModifier.STATIC, PsiModifier.FINAL);
+
+        result.add(methodBuilder);
+    }
+
+    private static void buildNewInstance3From(Project project, PsiClass psiClass, List result) {
+        ObjSqlLightMethodBuilder methodBuilder = new ObjSqlLightMethodBuilder(psiClass.getManager(), "newInstanceFrom");
+        methodBuilder
+                .withParameter("properties", getProjectType("java.util.Map", project))
                 .withMethodReturnType(getProjectType(psiClass.getQualifiedName(), project))
                 .withContainingClass(psiClass)
                 .withModifier(PsiModifier.PUBLIC, PsiModifier.STATIC, PsiModifier.FINAL);
