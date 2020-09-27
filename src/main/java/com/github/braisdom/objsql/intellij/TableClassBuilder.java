@@ -17,6 +17,7 @@ final class TableClassBuilder {
 
     static void buildClass(PsiClass psiClass, List result) {
         List<PsiField> psiFields = new ArrayList<>();
+
         LightPsiClassBuilder classBuilder = new LightPsiClassBuilder(psiClass, "Table") {
             @NotNull
             @Override
@@ -49,8 +50,10 @@ final class TableClassBuilder {
         PsiClass[] innerClasses = psiClass.getInnerClasses();
         for (PsiClass innerClass : innerClasses) {
             if(innerClass.getName().equals("Table")) {
-                ObjSqlLightMethodBuilder methodBuilder = new ObjSqlLightMethodBuilder(psiClass.getManager(), "asTable");
-                PsiType returnType = JavaPsiFacade.getElementFactory(innerClass.getProject()).createType(innerClass);
+                ObjSqlLightMethodBuilder methodBuilder = new ObjSqlLightMethodBuilder(
+                        psiClass.getManager(), "asTable");
+                PsiType returnType = JavaPsiFacade.getElementFactory(innerClass.getProject())
+                        .createTypeFromText("Table", psiClass);
                 methodBuilder.withMethodReturnType(returnType)
                         .withContainingClass(psiClass)
                         .withModifier(PsiModifier.PUBLIC, PsiModifier.STATIC, PsiModifier.FINAL);

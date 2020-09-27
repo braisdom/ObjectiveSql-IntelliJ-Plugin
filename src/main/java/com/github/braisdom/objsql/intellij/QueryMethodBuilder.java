@@ -36,15 +36,23 @@ final class QueryMethodBuilder {
     }
 
     private static void buildCount(Project project, PsiClass psiClass, List result) {
-        ObjSqlLightMethodBuilder methodBuilder = new ObjSqlLightMethodBuilder(psiClass.getManager(), "count");
-        methodBuilder.withParameter("predicate", "java.lang.String")
+        ObjSqlLightMethodBuilder countMethodBuilder = new ObjSqlLightMethodBuilder(psiClass.getManager(), "count");
+        countMethodBuilder.withParameter("predicate", "java.lang.String")
                 .withParameter("args", "java.lang.Object", true)
                 .withMethodReturnType(PsiType.INT)
                 .withContainingClass(psiClass)
                 .withModifier(PsiModifier.PUBLIC, PsiModifier.STATIC, PsiModifier.FINAL)
                 .withException(PsiClassType.getTypeByName("java.sql.SQLException", project, GlobalSearchScope.allScope(project)));
 
-        result.add(methodBuilder);
+        ObjSqlLightMethodBuilder countAllMethodBuilder = new ObjSqlLightMethodBuilder(psiClass.getManager(), "countAll");
+        countAllMethodBuilder.withMethodReturnType(PsiType.INT)
+                .withContainingClass(psiClass)
+                .withModifier(PsiModifier.PUBLIC, PsiModifier.STATIC, PsiModifier.FINAL)
+                .withException(PsiClassType.getTypeByName("java.sql.SQLException", project, GlobalSearchScope.allScope(project)));
+
+
+        result.add(countMethodBuilder);
+        result.add(countAllMethodBuilder);
     }
 
     private static void buildQuery(Project project, PsiClass psiClass, List result) {

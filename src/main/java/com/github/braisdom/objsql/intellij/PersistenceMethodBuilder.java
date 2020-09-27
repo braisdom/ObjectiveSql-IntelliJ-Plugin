@@ -31,7 +31,8 @@ final class PersistenceMethodBuilder {
     }
 
     private static void buildCreatePersistence(Project project, PsiClass psiClass, List result) {
-        ObjSqlLightMethodBuilder methodBuilder = new ObjSqlLightMethodBuilder(psiClass.getManager(), "createPersistence");
+        ObjSqlLightMethodBuilder methodBuilder = new ObjSqlLightMethodBuilder(psiClass.getManager(),
+                "createPersistence");
         PsiType psiType = getProjectType("com.github.braisdom.objsql.Persistence", project);
         methodBuilder.withMethodReturnType(psiType)
                 .withContainingClass(psiClass)

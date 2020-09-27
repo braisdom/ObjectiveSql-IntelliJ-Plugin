@@ -47,9 +47,19 @@ public class ObjSqlLightMethodBuilder extends LightMethodBuilder {
     return this;
   }
 
+  public ObjSqlLightMethodBuilder withMethodReturnType(String returnType) {
+    setMethodReturnType(returnType);
+    return this;
+  }
+
   @Override
   public LightMethodBuilder setMethodReturnType(PsiType returnType) {
     myReturnTypeAsText = returnType.getPresentableText();
+    return super.setMethodReturnType(returnType);
+  }
+
+  @Override
+  public LightMethodBuilder setMethodReturnType(String returnType) {
     return super.setMethodReturnType(returnType);
   }
 

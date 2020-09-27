@@ -18,7 +18,8 @@ final class RelationFieldBuilder {
         for (PsiField field : fields) {
             PsiAnnotation annotation = field.getAnnotation(RELATION_ANNOTATION);
             if (annotation != null) {
-                PsiType primaryType = PsiType.getTypeByName("com.github.braisdom.objsql.relation.Relationship", project, GlobalSearchScope.allScope(project));
+                PsiType primaryType = PsiType.getTypeByName("com.github.braisdom.objsql.relation.Relationship",
+                        project, GlobalSearchScope.allScope(project));
                 String fieldName = genFieldName(field, annotation);
                 if(fieldName != null) {
                     LightFieldBuilder primaryBuilder = new LightFieldBuilder(fieldName, primaryType, psiClass);
@@ -40,6 +41,6 @@ final class RelationFieldBuilder {
         } else if ("RelationType.BELONGS_TO".equalsIgnoreCase(value)) {
             return WordUtil.underscore(String.format("%s_%s", "BELONGS_TO", psiField.getName())).toUpperCase();
         }
-        return null;
+        return WordUtil.underscore(String.format("%s_%s", "HAS_MANY", psiField.getName())).toUpperCase();
     }
 }

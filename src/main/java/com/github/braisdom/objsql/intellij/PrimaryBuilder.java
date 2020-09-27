@@ -44,6 +44,9 @@ final class PrimaryBuilder {
                 .withModifier(PsiModifier.PUBLIC);
 
         queryByPrimaryBuilder.withParameter(primaryName, primaryType)
+                .withParameter("relations", PsiType.getTypeByName(
+                        "com.github.braisdom.objsql.relation.Relationship",
+                        project, GlobalSearchScope.allScope(project)), true)
                 .withMethodReturnType(PsiType.getTypeByName(psiClass.getQualifiedName(),
                         project, GlobalSearchScope.allScope(project)))
                 .withContainingClass(psiClass)
