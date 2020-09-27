@@ -2,7 +2,7 @@
     <id>com.github.braisdom.object-sql-intellij</id>
     <name>ObjectiveSql</name>
     <vendor email="wangyonghe@msn.com" url="http://www.objsql.com">ObjectiveSql</vendor>
-    <version>1.2.2</version>
+    <version>1.2.3</version>
     <idea-version since-build="191.1"/>
     <category>Tools Integration</category>
     <description><![CDATA[
