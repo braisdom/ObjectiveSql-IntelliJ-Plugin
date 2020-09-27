@@ -17,7 +17,9 @@ final class PersistenceMethodBuilder {
     static void buildMethod(PsiClass psiClass, List result) {
         buildCreatePersistence(psiClass.getProject(), psiClass, result);
         buildCreate(psiClass.getProject(), psiClass, result);
+        buildCreate2(psiClass.getProject(), psiClass, result);
         buildCreateArray(psiClass.getProject(), psiClass, result);
+        buildCreateArray2(psiClass.getProject(), psiClass, result);
         buildUpdate(psiClass.getProject(), psiClass, result);
         buildUpdate2(psiClass.getProject(), psiClass, result);
         buildDestroy(psiClass.getProject(), psiClass, result);
@@ -43,11 +45,37 @@ final class PersistenceMethodBuilder {
     }
 
     private static void buildCreate(Project project, PsiClass psiClass, List result) {
-        ObjSqlLightMethodBuilder methodBuilder = new ObjSqlLightMethodBuilder(psiClass.getManager(), "create");
+        ObjSqlLightMethodBuilder createBuilder = new ObjSqlLightMethodBuilder(psiClass.getManager(), "create");
         PsiType psiType = getProjectType(psiClass.getQualifiedName(), project);
-        methodBuilder.withParameter("dirtyObject", getProjectType(psiClass.getQualifiedName(), project))
+        createBuilder.withParameter("dirtyObject", getProjectType(psiClass.getQualifiedName(), project))
                 .withParameter("skipValidation", PsiType.BOOLEAN)
                 .withMethodReturnType(psiType)
+                .withContainingClass(psiClass)
+                .withModifier(PsiModifier.PUBLIC, PsiModifier.STATIC, PsiModifier.FINAL)
+                .withException(PsiClassType.getTypeByName("java.sql.SQLException", project, GlobalSearchScope.allScope(project)));
+
+        result.add(createBuilder);
+    }
+
+    private static void buildCreate2(Project project, PsiClass psiClass, List result) {
+        ObjSqlLightMethodBuilder createBuilder = new ObjSqlLightMethodBuilder(psiClass.getManager(), "create");
+        PsiType psiType = getProjectType(psiClass.getQualifiedName(), project);
+        createBuilder.withParameter("dirtyObject", getProjectType(psiClass.getQualifiedName(), project))
+                .withParameter("skipValidation", PsiType.BOOLEAN)
+                .withParameter("skipPrimaryKeyOnInserting", PsiType.BOOLEAN)
+                .withMethodReturnType(psiType)
+                .withContainingClass(psiClass)
+                .withModifier(PsiModifier.PUBLIC, PsiModifier.STATIC, PsiModifier.FINAL)
+                .withException(PsiClassType.getTypeByName("java.sql.SQLException", project, GlobalSearchScope.allScope(project)));
+
+        result.add(createBuilder);
+    }
+
+    private static void buildCreateArray(Project project, PsiClass psiClass, List result) {
+        ObjSqlLightMethodBuilder methodBuilder = new ObjSqlLightMethodBuilder(psiClass.getManager(), "create");
+        methodBuilder.withParameter("dirtyObjects", getProjectType(psiClass.getQualifiedName(), project).createArrayType())
+                .withParameter("skipValidation", PsiType.BOOLEAN)
+                .withMethodReturnType(PsiType.INT.createArrayType())
                 .withContainingClass(psiClass)
                 .withModifier(PsiModifier.PUBLIC, PsiModifier.STATIC, PsiModifier.FINAL)
                 .withException(PsiClassType.getTypeByName("java.sql.SQLException", project, GlobalSearchScope.allScope(project)));
@@ -55,10 +83,11 @@ final class PersistenceMethodBuilder {
         result.add(methodBuilder);
     }
 
-    private static void buildCreateArray(Project project, PsiClass psiClass, List result) {
+    private static void buildCreateArray2(Project project, PsiClass psiClass, List result) {
         ObjSqlLightMethodBuilder methodBuilder = new ObjSqlLightMethodBuilder(psiClass.getManager(), "create");
         methodBuilder.withParameter("dirtyObjects", getProjectType(psiClass.getQualifiedName(), project).createArrayType())
                 .withParameter("skipValidation", PsiType.BOOLEAN)
+                .withParameter("skipPrimaryKeyOnInserting", PsiType.BOOLEAN)
                 .withMethodReturnType(PsiType.INT.createArrayType())
                 .withContainingClass(psiClass)
                 .withModifier(PsiModifier.PUBLIC, PsiModifier.STATIC, PsiModifier.FINAL)
