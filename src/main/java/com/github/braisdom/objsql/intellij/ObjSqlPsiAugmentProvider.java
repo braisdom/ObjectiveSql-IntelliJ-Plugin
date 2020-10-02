@@ -113,10 +113,11 @@ public class ObjSqlPsiAugmentProvider extends PsiAugmentProvider {
 
     static String getPrimaryName(PsiClass psiClass) {
         PsiAnnotation annotation = psiClass.getAnnotation(DOMAIN_MODEL_CLASSNAME);
-        if (psiClass.hasAnnotation(DOMAIN_MODEL_CLASSNAME))
+        if (annotation == null || psiClass.hasAnnotation(DOMAIN_MODEL_CLASSNAME))
             return "id";
         else {
-            PsiAnnotationMemberValue annotationMemberValue = annotation.findAttributeValue("primaryFieldName");
+            PsiAnnotationMemberValue annotationMemberValue = annotation
+                    .findAttributeValue("primaryFieldName");
             if(annotationMemberValue != null)
                 return annotationMemberValue.getText().replaceAll("^\"|\"$", "");
             else return null;

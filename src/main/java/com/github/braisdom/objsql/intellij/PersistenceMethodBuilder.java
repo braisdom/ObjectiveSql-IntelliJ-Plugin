@@ -25,6 +25,7 @@ final class PersistenceMethodBuilder {
         buildDestroy(psiClass.getProject(), psiClass, result);
         buildDestroy2(psiClass.getProject(), psiClass, result);
         buildSave(psiClass.getProject(), psiClass, result);
+        buildSave2(psiClass.getProject(), psiClass, result);
         buildValidate(psiClass.getProject(), psiClass, result);
         buildExecute(psiClass.getProject(), psiClass, result);
         buildNewInstanceFrom(psiClass.getProject(), psiClass, result);
@@ -109,6 +110,18 @@ final class PersistenceMethodBuilder {
     private static void buildSave(Project project, PsiClass psiClass, List result) {
         ObjSqlLightMethodBuilder methodBuilder = new ObjSqlLightMethodBuilder(psiClass.getManager(), "save");
         methodBuilder.withParameter("skipValidation", PsiType.BOOLEAN)
+                .withMethodReturnType(getProjectType(psiClass.getQualifiedName(), project))
+                .withContainingClass(psiClass)
+                .withModifier(PsiModifier.PUBLIC, PsiModifier.FINAL)
+                .withException(PsiClassType.getTypeByName("java.sql.SQLException", project, GlobalSearchScope.allScope(project)));
+
+        result.add(methodBuilder);
+    }
+
+    private static void buildSave2(Project project, PsiClass psiClass, List result) {
+        ObjSqlLightMethodBuilder methodBuilder = new ObjSqlLightMethodBuilder(psiClass.getManager(), "save");
+        methodBuilder.withParameter("skipValidation", PsiType.BOOLEAN)
+                .withParameter("skipPrimaryKeyOnInserting", PsiType.BOOLEAN)
                 .withMethodReturnType(getProjectType(psiClass.getQualifiedName(), project))
                 .withContainingClass(psiClass)
                 .withModifier(PsiModifier.PUBLIC, PsiModifier.FINAL)
