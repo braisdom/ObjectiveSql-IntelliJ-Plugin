@@ -20,6 +20,8 @@ public class ObjSqlPsiAugmentProvider extends PsiAugmentProvider {
 
     public static final String DOMAIN_MODEL_CLASSNAME = "com.github.braisdom.objsql.annotations.DomainModel";
 
+    private static final List LANG_PRIMARY_TYPES = Arrays.asList(new String[]{"Long", "Integer", "String", "Short"});
+
     @NotNull
     @Override
     protected <Psi extends PsiElement> List<Psi> getAugments(@NotNull PsiElement element, @NotNull Class<Psi> type) {
@@ -135,12 +137,12 @@ public class ObjSqlPsiAugmentProvider extends PsiAugmentProvider {
             String[] rawPrimaryTypePart = rawPrimaryTypeName.split("\\.");
             String primaryTypeName = String.join(".",
                     Arrays.copyOfRange(rawPrimaryTypePart, 0, rawPrimaryTypePart.length - 1));
-            if (!primaryTypeName.startsWith("java.lang"))
+            if (LANG_PRIMARY_TYPES.contains(primaryTypeName))
                 primaryTypeName = String.format("java.lang.%s", primaryTypeName);
 
             return PsiType.getTypeByName(primaryTypeName, project, GlobalSearchScope.allScope(project));
         } else
-            return PsiType.getTypeByName("java.lang.Integer", project, GlobalSearchScope.allScope(project));
+            return PsiType.getTypeByName("java.lang.Long", project, GlobalSearchScope.allScope(project));
     }
 
     static PsiType getProjectType(String qName, Project project) {
@@ -155,7 +157,8 @@ public class ObjSqlPsiAugmentProvider extends PsiAugmentProvider {
     static PsiType createParameterType(Project project, PsiClassType classType, String... parameters) {
         PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
         PsiClass psiClass = classType.resolve();
-        if (psiClass.getTypeParameters().length == parameters.length) {
+        if (psiClass != null && psiClass.getTypeParameters() != null &&
+                psiClass.getTypeParameters().length == parameters.length) {
             List<PsiType> psiTypes = new ArrayList<>();
             for (String parameter : parameters)
                 psiTypes.add(getProjectType(parameter, project));
