@@ -1,12 +1,24 @@
 package com.github.braisdom.objsql.intellij;
 
+import com.intellij.ide.util.PsiNavigationSupport;
 import com.intellij.lang.ASTNode;
+import com.intellij.openapi.compiler.ex.CompilerPathsEx;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleManager;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.roots.ModuleRootManager;
+import com.intellij.openapi.roots.ProjectRootManager;
+import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.TextRange;
+import com.intellij.openapi.vfs.PlatformVirtualFileManager;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.pom.Navigatable;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.CheckUtil;
 import com.intellij.psi.impl.light.LightMethodBuilder;
 import com.intellij.psi.impl.light.LightModifierList;
 import com.intellij.psi.impl.light.LightTypeParameterListBuilder;
+import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -50,6 +62,49 @@ public class ObjSqlLightMethodBuilder extends LightMethodBuilder {
   public ObjSqlLightMethodBuilder withMethodReturnType(String returnType) {
     setMethodReturnType(returnType);
     return this;
+  }
+
+  @Override
+  public void navigate(boolean requestFocus) {
+    Project project = getProject();
+    String qualifiedName = getContainingClass().getQualifiedName();
+    String[] outputPaths = CompilerPathsEx.getOutputPaths(ModuleManager.getInstance(project).getModules());
+
+    String classFileName = qualifiedName.replaceAll("\\.", "/") + ".class";
+
+    for(String outputPath : outputPaths) {
+      String fullClassFileName = String.format("file://%s/%s", outputPath, classFileName);
+      VirtualFile virtualFile = PlatformVirtualFileManager.getInstance().findFileByUrl(fullClassFileName);
+      if(virtualFile != null) {
+        PsiJavaFile psiJavaFile = (PsiJavaFile) PsiUtil.getPsiFile(project, virtualFile);
+        PsiClass[] psiClasses = psiJavaFile.getClasses();
+        for(PsiClass psiClass : psiClasses) {
+          PsiMethod[] psiMethods = psiClass.getMethods();
+          for (PsiMethod psiMethod : psiMethods) {
+            if (getName().equals(psiMethod.getName())) {
+              Navigatable descriptor = PsiNavigationSupport.getInstance().getDescriptor(psiMethod);
+              if (descriptor != null) {
+                descriptor.navigate(requestFocus);
+                return;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    String message = String.format("Cannot find '%s', \nyou can rebuild project and retry.", classFileName);
+    Messages.showErrorDialog(project, message, "Error");
+  }
+
+  @Override
+  public boolean canNavigate() {
+    return PsiNavigationSupport.getInstance().canNavigate(this);
+  }
+
+  @Override
+  public boolean canNavigateToSource() {
+    return false;
   }
 
   @Override
@@ -236,7 +291,7 @@ public class ObjSqlLightMethodBuilder extends LightMethodBuilder {
   }
 
   public String toString() {
-    return "LombokLightMethodBuilder: " + getName();
+    return getClass().getSimpleName() + "#" + getName();
   }
 
   @Override
