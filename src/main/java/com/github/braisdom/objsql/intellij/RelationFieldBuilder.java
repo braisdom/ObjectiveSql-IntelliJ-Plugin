@@ -22,7 +22,7 @@ final class RelationFieldBuilder {
                         project, GlobalSearchScope.allScope(project));
                 String fieldName = genFieldName(field, annotation);
                 if(fieldName != null) {
-                    LightFieldBuilder primaryBuilder = new LightFieldBuilder(fieldName, primaryType, psiClass);
+                    ObjsqlLightFieldBuilder primaryBuilder = new ObjsqlLightFieldBuilder(fieldName, primaryType, psiClass);
                     primaryBuilder.setModifiers(PsiModifier.PUBLIC, PsiModifier.FINAL, PsiModifier.STATIC);
                     primaryBuilder.setContainingClass(psiClass);
 

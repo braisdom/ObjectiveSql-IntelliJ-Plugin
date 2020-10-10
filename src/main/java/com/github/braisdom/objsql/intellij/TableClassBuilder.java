@@ -78,7 +78,7 @@ final class TableClassBuilder {
         String primaryName = getPrimaryName(psiClass);
 
         if(primaryName != null) {
-            LightFieldBuilder fieldBuilder = new LightFieldBuilder(primaryName, fieldType, psiClass);
+            ObjsqlLightFieldBuilder fieldBuilder = new ObjsqlLightFieldBuilder(primaryName, fieldType, psiClass);
             fieldBuilder.setModifiers(PsiModifier.PUBLIC, PsiModifier.FINAL);
             fieldBuilder.setContainingClass(innerClass);
 
@@ -94,7 +94,7 @@ final class TableClassBuilder {
             if(transientAnn == null && relationAnn == null) {
                 PsiClassType columnClassType = (PsiClassType) getProjectType("com.github.braisdom.objsql.sql.Column",
                         psiClass.getProject());
-                LightFieldBuilder fieldBuilder = new LightFieldBuilder(field.getName(), columnClassType, psiClass);
+                ObjsqlLightFieldBuilder fieldBuilder = new ObjsqlLightFieldBuilder(field.getName(), columnClassType, psiClass);
                 fieldBuilder.setModifiers(PsiModifier.PUBLIC, PsiModifier.FINAL);
                 fieldBuilder.setContainingClass(innerClass);
                 psiFields.add(fieldBuilder);

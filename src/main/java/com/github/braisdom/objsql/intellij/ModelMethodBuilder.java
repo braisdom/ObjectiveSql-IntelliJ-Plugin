@@ -26,7 +26,8 @@ final class ModelMethodBuilder {
     private static void buildRawAttributes(PsiClass psiClass, List result) {
         PsiType fieldType = createParameterType(psiClass.getProject(),
                 "java.util.Map", "java.lang.String", "java.lang.Object");
-        LightFieldBuilder primaryBuilder = new LightFieldBuilder("rawAttributes", fieldType, psiClass);
+        ObjsqlLightFieldBuilder primaryBuilder = new ObjsqlLightFieldBuilder("rawAttributes", fieldType, psiClass);
+        primaryBuilder.setNavigationElement(psiClass);
         primaryBuilder.setModifiers(PsiModifier.PRIVATE, PsiModifier.FINAL);
         primaryBuilder.setContainingClass(psiClass);
 
@@ -34,13 +35,13 @@ final class ModelMethodBuilder {
     }
 
     private static void buildTableName(PsiClass psiClass, List result) {
-        PsiType fieldType = createParameterType(psiClass.getProject(),
-                "java.util.Map", "java.lang.String", "java.lang.Object");
-        LightFieldBuilder primaryBuilder = new LightFieldBuilder("TABLE_NAME", fieldType, psiClass);
-        primaryBuilder.setModifiers(PsiModifier.PUBLIC, PsiModifier.STATIC, PsiModifier.FINAL);
-        primaryBuilder.setContainingClass(psiClass);
+        PsiType fieldType = createParameterType(psiClass.getProject(), "java.lang.String");
+        ObjsqlLightFieldBuilder tableNameBuilder = new ObjsqlLightFieldBuilder("TABLE_NAME", fieldType, psiClass);
+        tableNameBuilder.setModifiers(PsiModifier.PUBLIC, PsiModifier.STATIC, PsiModifier.FINAL);
+        tableNameBuilder.setContainingClass(psiClass);
+        tableNameBuilder.setNavigationElement(tableNameBuilder);
 
-        result.add(primaryBuilder);
+        result.add(tableNameBuilder);
     }
 
     private static void buildGetRawAttributes(PsiClass psiClass, List result) {

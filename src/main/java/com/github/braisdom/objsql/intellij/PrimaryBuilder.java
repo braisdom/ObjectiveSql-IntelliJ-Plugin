@@ -18,7 +18,7 @@ final class PrimaryBuilder {
     static void buildField(PsiClass psiClass, List result) {
         PsiType primaryType = getPrimaryType(psiClass);
         String primaryName = getPrimaryName(psiClass);
-        LightFieldBuilder primaryBuilder = new LightFieldBuilder(primaryName, primaryType, psiClass);
+        ObjsqlLightFieldBuilder primaryBuilder = new ObjsqlLightFieldBuilder(primaryName, primaryType, psiClass);
         primaryBuilder.setModifiers(PsiModifier.PRIVATE);
         primaryBuilder.setContainingClass(psiClass);
 
