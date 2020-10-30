@@ -45,7 +45,7 @@ final class QueryMethodBuilder {
                 .withException(PsiClassType.getTypeByName("java.sql.SQLException", project, GlobalSearchScope.allScope(project)));
 
         ObjSqlLightMethodBuilder countAllMethodBuilder = new ObjSqlLightMethodBuilder(psiClass.getManager(), "countAll");
-        countAllMethodBuilder.withMethodReturnType(PsiType.INT)
+        countAllMethodBuilder.withMethodReturnType(PsiType.LONG)
                 .withContainingClass(psiClass)
                 .withModifier(PsiModifier.PUBLIC, PsiModifier.STATIC, PsiModifier.FINAL)
                 .withException(PsiClassType.getTypeByName("java.sql.SQLException", project, GlobalSearchScope.allScope(project)));
