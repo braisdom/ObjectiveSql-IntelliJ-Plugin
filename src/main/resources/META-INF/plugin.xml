@@ -34,6 +34,12 @@
     <depends>com.intellij.modules.platform</depends>
     <depends>com.intellij.modules.java</depends>
 
+    <project-components>
+        <component>
+            <implementation-class>com.github.braisdom.objsql.intellij.oo.OOComponent</implementation-class>
+        </component>
+    </project-components>
+
     <extensions defaultExtensionNs="com.intellij">
         <lang.psiAugmentProvider implementation="com.github.braisdom.objsql.intellij.ObjSqlPsiAugmentProvider"/>
         <implicitUsageProvider implementation="com.github.braisdom.objsql.intellij.ObjSqlImplicitUsageProvider"/>
