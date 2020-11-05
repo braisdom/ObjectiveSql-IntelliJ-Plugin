@@ -15,22 +15,39 @@
 package com.github.braisdom.objsql.intellij.oo;
 
 import com.intellij.psi.PsiBinaryExpression;
+import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.impl.source.resolve.JavaResolveCache;
 import com.intellij.psi.impl.source.tree.java.PsiBinaryExpressionImpl;
+import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.Function;
 
 public class PsiOOBinaryExpressionImpl extends PsiBinaryExpressionImpl {
+
     @Override
     public PsiType getType() {
-        return JavaResolveCache.getInstance(getProject()).getType(this, new Function<PsiBinaryExpression, PsiType>() {
-            @Override
-            public PsiType fun(PsiBinaryExpression e) {
-                if (TypeConversionUtil.isBinaryOperatorApplicable(e.getOperationTokenType(), e.getLOperand(), e.getROperand(), false))
-                    return PsiOOBinaryExpressionImpl.super.getType();
-                return OOResolver.getOOType(PsiOOBinaryExpressionImpl.this);
+        return JavaResolveCache.getInstance(getProject())
+                .getType(this, (Function<PsiBinaryExpression, PsiType>) e -> {
+            if (TypeConversionUtil.isBinaryOperatorApplicable(e.getOperationTokenType(),
+                    e.getLOperand(), e.getROperand(), true)) {
+                return doGetType((PsiBinaryExpressionImpl) e);
             }
+            return OOResolver.getOOType(PsiOOBinaryExpressionImpl.this);
         });
+    }
+
+    private static PsiType doGetType(PsiBinaryExpressionImpl param) {
+        PsiExpression lOperand = param.getLOperand();
+        PsiExpression rOperand = param.getROperand();
+        if (rOperand == null) return null;
+        PsiType rType = rOperand.getType();
+        IElementType sign = param.getOperationTokenType();
+        // optimization: if we can calculate type based on right type only
+        PsiType type = TypeConversionUtil.calcTypeForBinaryExpression(null, rType, sign, false);
+        if (type != TypeConversionUtil.NULL_TYPE) return type;
+
+        PsiType lType = lOperand.getType();
+        return TypeConversionUtil.calcTypeForBinaryExpression(lType, rType, sign, true);
     }
 }

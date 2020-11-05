@@ -28,7 +28,8 @@ public class PsiOOPolyadicExpressionImpl extends PsiPolyadicExpressionImpl {
     public PsiType getType() {
         return JavaResolveCache.getInstance(getProject()).getType(this, OO_TYPE_EVALUATOR);
     }
-    private static final Function<PsiPolyadicExpressionImpl,PsiType> OO_TYPE_EVALUATOR = new NullableFunction<PsiPolyadicExpressionImpl, PsiType>() {
+
+    private static final Function<PsiPolyadicExpressionImpl, PsiType> OO_TYPE_EVALUATOR = new NullableFunction<PsiPolyadicExpressionImpl, PsiType>() {
         @Override
         public PsiType fun(PsiPolyadicExpressionImpl param) {
             // copied from com.intellij.psi.impl.source.tree.java.PsiPolyadicExpressionImpl.doGetType
@@ -36,7 +37,7 @@ public class PsiOOPolyadicExpressionImpl extends PsiPolyadicExpressionImpl {
             PsiType lType = null;
 
             IElementType sign = param.getOperationTokenType();
-            for (int i=1; i<operands.length;i++) {
+            for (int i = 1; i < operands.length; i++) {
                 PsiType rType = operands[i].getType();
                 // optimization: if we can calculate type based on right type only
                 PsiType type = TypeConversionUtil.calcTypeForBinaryExpression(null, rType, sign, false);

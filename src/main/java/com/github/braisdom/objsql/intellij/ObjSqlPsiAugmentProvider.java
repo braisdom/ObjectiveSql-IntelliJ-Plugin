@@ -90,7 +90,7 @@ public class ObjSqlPsiAugmentProvider extends PsiAugmentProvider {
 
         @Override
         public Result<List<Psi>> compute() {
-            return recursionGuard.doPreventingRecursion(psiClass, true, () -> {
+            return (Result<List<Psi>>) recursionGuard.doPreventingRecursion(psiClass, true, () -> {
                 final List<Psi> result = new ArrayList<>();
 
                 if (type == PsiMethod.class) {

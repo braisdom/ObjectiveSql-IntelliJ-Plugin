@@ -30,9 +30,12 @@ import static com.github.braisdom.objsql.intellij.oo.Util.sneakyThrow;
 public class OOHighlightVisitorImpl extends HighlightVisitorImpl {
 
     private HighlightInfoHolder myHolder;
+    private PsiResolveHelper resolveHelper;
 
     protected OOHighlightVisitorImpl(@NotNull PsiResolveHelper resolveHelper) {
         super(resolveHelper);
+
+        this.resolveHelper = resolveHelper;
     }
 
     @Override
@@ -139,5 +142,11 @@ public class OOHighlightVisitorImpl extends HighlightVisitorImpl {
         } catch (IllegalAccessException e) {
             throw sneakyThrow(e);
         }
+    }
+
+    @Override
+    @NotNull
+    public OOHighlightVisitorImpl clone() {
+        return new OOHighlightVisitorImpl(resolveHelper);
     }
 }
