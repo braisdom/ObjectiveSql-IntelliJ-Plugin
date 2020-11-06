@@ -30,7 +30,7 @@ public class PsiOOBinaryExpressionImpl extends PsiBinaryExpressionImpl {
         return JavaResolveCache.getInstance(getProject())
                 .getType(this, (Function<PsiBinaryExpression, PsiType>) e -> {
             if (TypeConversionUtil.isBinaryOperatorApplicable(e.getOperationTokenType(),
-                    e.getLOperand(), e.getROperand(), true)) {
+                    e.getLOperand(), e.getROperand(), false)) {
                 return doGetType((PsiBinaryExpressionImpl) e);
             }
             return OOResolver.getOOType(PsiOOBinaryExpressionImpl.this);
