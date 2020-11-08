@@ -20,11 +20,11 @@ import java.util.Map;
 /** Caution this file is symlinked in all plugins */
 public interface OOMethods {
     Map<String, String> binary = new HashMap<String, String>() {{
-        put("+",    "add");
-        put("-",    "subtract");
-        put("*",    "multiply");
-        put("/",    "divide");
-        put("%",    "remainder");
+        put("+",    "plus");
+        put("-",    "minus");
+        put("*",    "times");
+        put("/",    "div");
+        put("%",    "rem");
         put("&",    "and");
         put("|",    "or");
         put("^",    "xor");
