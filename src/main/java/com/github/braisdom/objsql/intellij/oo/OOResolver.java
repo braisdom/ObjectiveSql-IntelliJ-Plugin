@@ -122,11 +122,11 @@ public class OOResolver {
             return null;
         PsiMethod[] methods = psiClass.findMethodsByName(methodName, true);
         for (PsiMethod method : methods) {
-            PsiParameterList parameterList = method.getParameterList();
+            PsiParameter[] parameters = method.getParameterList().getParameters();
             for (int i = 0; i < argTypes.length; i++) {
                 PsiType argType = argTypes[i];
-                if(i < parameterList.getParametersCount()) {
-                    PsiType methodArgType = parameterList.getParameter(i).getType();
+                if(i < parameters.length) {
+                    PsiType methodArgType = parameters[i].getType();
                     if(argType.isConvertibleFrom(methodArgType))
                         return subst.substitute(method.getReturnType());
                 } else return null;
