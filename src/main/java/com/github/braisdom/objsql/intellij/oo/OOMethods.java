@@ -25,15 +25,12 @@ public interface OOMethods {
         put("*",    "times");
         put("/",    "div");
         put("%",    "rem");
-        put("&",    "and");
-        put("|",    "or");
-        put("^",    "xor");
-        put("<<",   "shiftLeft");
-        put(">>",   "shiftRight");
-        put("<",    compareTo);
-        put(">",    compareTo);
-        put("<=",   compareTo);
-        put(">=",   compareTo);
+        put("<",    "lt");
+        put(">",    "gt");
+        put("<=",   "le");
+        put(">=",   "ge");
+        put("&&",   "and");
+        put("||",   "or");
     }};
     String revSuffix = "Rev";
     Map<String, String> unary = new HashMap<String, String>() {{
@@ -41,7 +38,6 @@ public interface OOMethods {
         put("---", "negate");   // jdk8
         put("~", "not");
     }};
-    String   compareTo = "compareTo";
     String   indexGet = "get";
     String[] indexSet = new String[]{"set", "put"};
     String[] valueOf = new String[]{"valueOf", "of"};

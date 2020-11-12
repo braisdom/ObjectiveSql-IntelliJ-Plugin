@@ -14,10 +14,8 @@
  */
 package com.github.braisdom.objsql.intellij.oo;
 
-import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.light.LightMethodBuilder;
 import com.intellij.psi.util.TypeConversionUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -42,8 +40,7 @@ public class OOResolver {
             if (res == null)
                 res = resolveMethod(right, methodname + OOMethods.revSuffix, left);
             if (res != null)
-                if (OOMethods.compareTo.equals(methodname)) return PsiType.BOOLEAN;
-                else return res;
+                return res;
         }
         return NoType;
     }
