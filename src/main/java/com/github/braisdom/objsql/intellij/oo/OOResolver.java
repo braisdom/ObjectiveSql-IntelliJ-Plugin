@@ -48,9 +48,9 @@ public class OOResolver {
     public static @NotNull PsiType getOOType(PsiPrefixExpression e) {
         if (e == null || e.getOperand() == null)
             return NoType;
-        String methodname = OOMethods.unary.get(e.getOperationSign().getText());
-        if (methodname != null) {
-            PsiType res = resolveMethod(e.getOperand(), methodname);
+        String methodName = OOMethods.unary.get(e.getOperationSign().getText());
+        if (methodName != null) {
+            PsiType res = resolveMethod(e.getOperand(), methodName);
             if (res != null)
                 return res;
         }
