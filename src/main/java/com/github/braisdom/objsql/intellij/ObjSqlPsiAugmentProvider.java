@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class ObjSqlPsiAugmentProvider extends PsiAugmentProvider {
@@ -25,7 +26,7 @@ public class ObjSqlPsiAugmentProvider extends PsiAugmentProvider {
     @NotNull
     @Override
     protected <Psi extends PsiElement> List<Psi> getAugments(@NotNull PsiElement element, @NotNull Class<Psi> type) {
-        final List<Psi> result = new ArrayList<>();
+        final List<Psi> result = Collections.emptyList();
 
         if ((type != PsiClass.class && type != PsiField.class && type != PsiMethod.class) || !(element instanceof PsiExtensibleClass)) {
             return result;

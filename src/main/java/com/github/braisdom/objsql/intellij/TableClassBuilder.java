@@ -15,10 +15,13 @@ import static com.github.braisdom.objsql.intellij.ObjSqlPsiAugmentProvider.getPr
 
 final class TableClassBuilder {
 
+    private static final String CLASS_NAME_TABLE = "Table";
+
     static void buildClass(PsiClass psiClass, List result) {
+        String qualifiedName = psiClass.getQualifiedName() + "." + CLASS_NAME_TABLE;
         List<PsiField> psiFields = new ArrayList<>();
 
-        LightPsiClassBuilder classBuilder = new LightPsiClassBuilder(psiClass, "Table") {
+        ObjSqlLightClassBuilder classBuilder = new ObjSqlLightClassBuilder(psiClass, "Table", qualifiedName) {
             @NotNull
             @Override
             public PsiField[] getFields() {
