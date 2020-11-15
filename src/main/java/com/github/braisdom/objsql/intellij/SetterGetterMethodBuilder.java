@@ -8,6 +8,8 @@ import com.intellij.psi.search.GlobalSearchScope;
 import java.util.Collection;
 import java.util.List;
 
+import static com.github.braisdom.objsql.intellij.ObjSqlPsiAugmentProvider.checkMethodExists;
+
 final class SetterGetterMethodBuilder {
 
     private static final Logger LOGGER = Logger.getInstance(SetterGetterMethodBuilder.class.getName());
@@ -28,12 +30,15 @@ final class SetterGetterMethodBuilder {
                             project, GlobalSearchScope.allScope(project)))
                     .withContainingClass(psiClass)
                     .withModifier(PsiModifier.PUBLIC);
-            result.add(setterMethodBuilder);
+            if(!checkMethodExists(psiClass, setterMethodBuilder))
+                result.add(setterMethodBuilder);
 
             getterMethodBuilder.withMethodReturnType(field.getType())
                     .withContainingClass(psiClass)
                     .withModifier(PsiModifier.PUBLIC);
-            result.add(getterMethodBuilder);
+
+            if(!checkMethodExists(psiClass, getterMethodBuilder))
+                result.add(getterMethodBuilder);
         }
     }
 
@@ -49,14 +54,5 @@ final class SetterGetterMethodBuilder {
             ch[0] = (char) (ch[0] - 32);
         }
         return new String(ch);
-    }
-
-    private static boolean checkMethodExists(PsiClass psiClass, String methodName, int parameterCount) {
-        PsiMethod[] methods = psiClass.findMethodsByName(methodName, true);
-        for (PsiMethod method : methods) {
-            if (method.getParameters().length == parameterCount)
-                return true;
-        }
-        return false;
     }
 }

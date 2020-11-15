@@ -9,8 +9,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 
 import java.util.List;
 
-import static com.github.braisdom.objsql.intellij.ObjSqlPsiAugmentProvider.getPrimaryType;
-import static com.github.braisdom.objsql.intellij.ObjSqlPsiAugmentProvider.getProjectType;
+import static com.github.braisdom.objsql.intellij.ObjSqlPsiAugmentProvider.*;
 
 final class PersistenceMethodBuilder {
 
@@ -41,7 +40,8 @@ final class PersistenceMethodBuilder {
                 .withModifier(PsiModifier.PUBLIC, PsiModifier.STATIC, PsiModifier.FINAL)
                 .withException(PsiClassType.getTypeByName("java.sql.SQLException", project, GlobalSearchScope.allScope(project)));
 
-        result.add(methodBuilder);
+        if(!checkMethodExists(psiClass, methodBuilder))
+            result.add(methodBuilder);
     }
 
     private static void buildCreate(Project project, PsiClass psiClass, List result) {
@@ -54,7 +54,8 @@ final class PersistenceMethodBuilder {
                 .withModifier(PsiModifier.PUBLIC, PsiModifier.STATIC, PsiModifier.FINAL)
                 .withException(PsiClassType.getTypeByName("java.sql.SQLException", project, GlobalSearchScope.allScope(project)));
 
-        result.add(createBuilder);
+        if(!checkMethodExists(psiClass, createBuilder))
+            result.add(createBuilder);
     }
 
     private static void buildCreate2(Project project, PsiClass psiClass, List result) {
@@ -68,7 +69,8 @@ final class PersistenceMethodBuilder {
                 .withModifier(PsiModifier.PUBLIC, PsiModifier.STATIC, PsiModifier.FINAL)
                 .withException(PsiClassType.getTypeByName("java.sql.SQLException", project, GlobalSearchScope.allScope(project)));
 
-        result.add(createBuilder);
+        if(!checkMethodExists(psiClass, createBuilder))
+            result.add(createBuilder);
     }
 
     private static void buildCreateArray(Project project, PsiClass psiClass, List result) {
@@ -80,7 +82,8 @@ final class PersistenceMethodBuilder {
                 .withModifier(PsiModifier.PUBLIC, PsiModifier.STATIC, PsiModifier.FINAL)
                 .withException(PsiClassType.getTypeByName("java.sql.SQLException", project, GlobalSearchScope.allScope(project)));
 
-        result.add(methodBuilder);
+        if(!checkMethodExists(psiClass, methodBuilder))
+            result.add(methodBuilder);
     }
 
     private static void buildCreateArray2(Project project, PsiClass psiClass, List result) {
@@ -93,7 +96,8 @@ final class PersistenceMethodBuilder {
                 .withModifier(PsiModifier.PUBLIC, PsiModifier.STATIC, PsiModifier.FINAL)
                 .withException(PsiClassType.getTypeByName("java.sql.SQLException", project, GlobalSearchScope.allScope(project)));
 
-        result.add(methodBuilder);
+        if(!checkMethodExists(psiClass, methodBuilder))
+            result.add(methodBuilder);
     }
 
     private static void buildValidate(Project project, PsiClass psiClass, List result) {
@@ -103,7 +107,8 @@ final class PersistenceMethodBuilder {
                 .withContainingClass(psiClass)
                 .withModifier(PsiModifier.PUBLIC, PsiModifier.FINAL);
 
-        result.add(methodBuilder);
+        if(!checkMethodExists(psiClass, methodBuilder))
+            result.add(methodBuilder);
     }
 
     private static void buildSave(Project project, PsiClass psiClass, List result) {
@@ -114,7 +119,8 @@ final class PersistenceMethodBuilder {
                 .withModifier(PsiModifier.PUBLIC, PsiModifier.FINAL)
                 .withException(PsiClassType.getTypeByName("java.sql.SQLException", project, GlobalSearchScope.allScope(project)));
 
-        result.add(methodBuilder);
+        if(!checkMethodExists(psiClass, methodBuilder))
+            result.add(methodBuilder);
     }
 
     private static void buildSave2(Project project, PsiClass psiClass, List result) {
@@ -126,7 +132,8 @@ final class PersistenceMethodBuilder {
                 .withModifier(PsiModifier.PUBLIC, PsiModifier.FINAL)
                 .withException(PsiClassType.getTypeByName("java.sql.SQLException", project, GlobalSearchScope.allScope(project)));
 
-        result.add(methodBuilder);
+        if(!checkMethodExists(psiClass, methodBuilder))
+            result.add(methodBuilder);
     }
 
     private static void buildUpdate(Project project, PsiClass psiClass, List result) {
@@ -141,7 +148,8 @@ final class PersistenceMethodBuilder {
                 .withModifier(PsiModifier.PUBLIC, PsiModifier.STATIC, PsiModifier.FINAL)
                 .withException(PsiClassType.getTypeByName("java.sql.SQLException", project, GlobalSearchScope.allScope(project)));
 
-        result.add(methodBuilder);
+        if(!checkMethodExists(psiClass, methodBuilder))
+            result.add(methodBuilder);
     }
 
     private static void buildUpdate2(Project project, PsiClass psiClass, List result) {
@@ -154,7 +162,8 @@ final class PersistenceMethodBuilder {
                 .withModifier(PsiModifier.PUBLIC, PsiModifier.STATIC, PsiModifier.FINAL)
                 .withException(PsiClassType.getTypeByName("java.sql.SQLException", project, GlobalSearchScope.allScope(project)));
 
-        result.add(methodBuilder);
+        if(!checkMethodExists(psiClass, methodBuilder))
+            result.add(methodBuilder);
     }
 
     private static void buildDestroy(Project project, PsiClass psiClass, List result) {
@@ -167,7 +176,8 @@ final class PersistenceMethodBuilder {
                 .withModifier(PsiModifier.PUBLIC, PsiModifier.STATIC, PsiModifier.FINAL)
                 .withException(PsiClassType.getTypeByName("java.sql.SQLException", project, GlobalSearchScope.allScope(project)));
 
-        result.add(methodBuilder);
+        if(!checkMethodExists(psiClass, methodBuilder))
+            result.add(methodBuilder);
     }
 
     private static void buildDestroy2(Project project, PsiClass psiClass, List result) {
@@ -179,7 +189,8 @@ final class PersistenceMethodBuilder {
                 .withModifier(PsiModifier.PUBLIC, PsiModifier.STATIC, PsiModifier.FINAL)
                 .withException(PsiClassType.getTypeByName("java.sql.SQLException", project, GlobalSearchScope.allScope(project)));
 
-        result.add(methodBuilder);
+        if(!checkMethodExists(psiClass, methodBuilder))
+            result.add(methodBuilder);
     }
 
     private static void buildExecute(Project project, PsiClass psiClass, List result) {
@@ -192,7 +203,8 @@ final class PersistenceMethodBuilder {
                 .withModifier(PsiModifier.PUBLIC, PsiModifier.STATIC, PsiModifier.FINAL)
                 .withException(PsiClassType.getTypeByName("java.sql.SQLException", project, GlobalSearchScope.allScope(project)));
 
-        result.add(methodBuilder);
+        if(!checkMethodExists(psiClass, methodBuilder))
+            result.add(methodBuilder);
     }
 
     private static void buildNewInstanceFrom(Project project, PsiClass psiClass, List result) {
@@ -204,7 +216,8 @@ final class PersistenceMethodBuilder {
                 .withContainingClass(psiClass)
                 .withModifier(PsiModifier.PUBLIC, PsiModifier.STATIC, PsiModifier.FINAL);
 
-        result.add(methodBuilder);
+        if(!checkMethodExists(psiClass, methodBuilder))
+            result.add(methodBuilder);
     }
 
     private static void buildNewInstance3From(Project project, PsiClass psiClass, List result) {
@@ -215,6 +228,7 @@ final class PersistenceMethodBuilder {
                 .withContainingClass(psiClass)
                 .withModifier(PsiModifier.PUBLIC, PsiModifier.STATIC, PsiModifier.FINAL);
 
-        result.add(methodBuilder);
+        if(!checkMethodExists(psiClass, methodBuilder))
+            result.add(methodBuilder);
     }
 }

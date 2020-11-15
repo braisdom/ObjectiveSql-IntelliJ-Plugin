@@ -170,4 +170,28 @@ public class ObjSqlPsiAugmentProvider extends PsiAugmentProvider {
         } else return null;
     }
 
+    static boolean checkMethodExists(PsiClass psiClass, PsiMethod psiMethod) {
+        PsiMethod[] methods = psiClass.findMethodsByName(psiMethod.getName(), true);
+        for (PsiMethod method : methods) {
+            if (!(method instanceof ObjSqlLightMethodBuilder)) {
+                PsiParameterList psiParameterList1 = method.getParameterList();
+                PsiParameterList psiParameterList2 = psiMethod.getParameterList();
+                if(psiParameterList1.getParameters().length == psiParameterList2.getParameters().length) {
+                    int parameterLength = psiParameterList1.getParameters().length;
+                    boolean parameterConsistent = true;
+                    PsiParameter[] psiElements1 = psiParameterList1.getParameters();
+                    PsiParameter[] psiElements2 = psiParameterList2.getParameters();
+                    for(int i =0; i< parameterLength; i++) {
+                        if(!psiElements1[i].getType().equals(psiElements2[i].getType())) {
+                            parameterConsistent = false;
+                            break;
+                        }
+                    }
+                    return parameterConsistent;
+                }
+            }
+        }
+        return false;
+    }
+
 }

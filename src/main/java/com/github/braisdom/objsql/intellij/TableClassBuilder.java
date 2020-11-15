@@ -10,8 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static com.github.braisdom.objsql.intellij.ObjSqlPsiAugmentProvider.getPrimaryName;
-import static com.github.braisdom.objsql.intellij.ObjSqlPsiAugmentProvider.getProjectType;
+import static com.github.braisdom.objsql.intellij.ObjSqlPsiAugmentProvider.*;
 
 final class TableClassBuilder {
 
@@ -61,7 +60,8 @@ final class TableClassBuilder {
                         .withContainingClass(psiClass)
                         .withModifier(PsiModifier.PUBLIC, PsiModifier.STATIC, PsiModifier.FINAL);
 
-                result.add(methodBuilder);
+                if(!checkMethodExists(psiClass, methodBuilder))
+                    result.add(methodBuilder);
                 break;
             }
         }
