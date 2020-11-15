@@ -238,14 +238,43 @@ public class ObjSqlLightMethodBuilder extends LightMethodBuilder {
             return true;
         }
 
-        if(!(o instanceof PsiMethod))
+        if (!(o instanceof PsiMethod))
             return false;
 
         PsiMethod that = (PsiMethod) o;
         if (!getName().equals(that.getName())) {
             return false;
-        } else
-            return true;
+        }
+        if (isConstructor() != that.isConstructor()) {
+            return false;
+        }
+        final PsiClass containingClass = getContainingClass();
+        final PsiClass thatContainingClass = that.getContainingClass();
+        if (containingClass != null ? !containingClass.equals(thatContainingClass) : thatContainingClass != null) {
+            return false;
+        }
+        if (!getModifierList().equals(that.getModifierList())) {
+            return false;
+        }
+        if (!getParameterList().equals(that.getParameterList())) {
+            return false;
+        }
+        return Objects.equals(getReturnType().getPresentableText(), that.getReturnType().getPresentableText());
     }
 
+    @Override
+    public int hashCode() {
+        // should be constant because of RenameJavaMethodProcessor#renameElement and fixNameCollisionsWithInnerClassMethod(...)
+        return 1;
+    }
+
+    @Override
+    public void delete() throws IncorrectOperationException {
+        // simple do nothing
+    }
+
+    @Override
+    public void checkDelete() throws IncorrectOperationException {
+        // simple do nothing
+    }
 }
