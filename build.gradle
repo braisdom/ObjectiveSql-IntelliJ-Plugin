@@ -38,15 +38,6 @@ intellij {
     updateSinceUntilBuild = false
     downloadSources = true
     plugins = ['java']
-//    publishPlugin {
-//        username = project.hasProperty('jetbrainsUser')    \
-//              ? project.property('jetbrainsUser')    \
-//              : System.getenv('JETBRAINS_USER')
-//        password = project.hasProperty('jetbrainsPassword')    \
-//              ? project.property('jetbrainsPassword')   \
-//              : System.getenv('JETBRAINS_PASSWORD')
-////        pluginId = '8277'
-//    }
 }
 
 patchPluginXml {
