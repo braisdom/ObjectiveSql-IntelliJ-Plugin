@@ -167,7 +167,7 @@ public class ObjSqlPsiAugmentProvider extends PsiAugmentProvider {
             for (String parameter : parameters)
                 psiTypes.add(getProjectType(parameter, project));
             return factory.createType(classType.resolve(), psiTypes.toArray(new PsiType[]{}));
-        } else return null;
+        } else return factory.createType(classType.resolve());
     }
 
     static boolean checkMethodExists(PsiClass psiClass, PsiMethod psiMethod) {

@@ -112,6 +112,7 @@ final class PersistenceMethodBuilder {
         methodBuilder
                 .withParameter("updates", getProjectType("java.lang.String", project))
                 .withParameter("predicates", getProjectType("java.lang.String", project))
+                .withParameter("args", "java.lang.Object", true)
                 .withMethodReturnType(PsiType.INT)
                 .withContainingClass(psiClass)
                 .withModifier(PsiModifier.PUBLIC, PsiModifier.STATIC, PsiModifier.FINAL)
@@ -139,6 +140,7 @@ final class PersistenceMethodBuilder {
         ObjSqlLightMethodBuilder methodBuilder = new ObjSqlLightMethodBuilder(psiClass.getManager(), "destroy");
         methodBuilder
                 .withParameter("predicates", getProjectType("java.lang.String", project))
+                .withParameter("args", "java.lang.Object", true)
                 .withMethodReturnType(PsiType.INT)
                 .withContainingClass(psiClass)
                 .withModifier(PsiModifier.PUBLIC, PsiModifier.STATIC, PsiModifier.FINAL)

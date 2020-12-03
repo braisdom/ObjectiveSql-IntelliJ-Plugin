@@ -9,8 +9,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 
 import java.util.List;
 
-import static com.github.braisdom.objsql.intellij.ObjSqlPsiAugmentProvider.getPrimaryName;
-import static com.github.braisdom.objsql.intellij.ObjSqlPsiAugmentProvider.getPrimaryType;
+import static com.github.braisdom.objsql.intellij.ObjSqlPsiAugmentProvider.*;
 import static com.github.braisdom.objsql.intellij.SetterGetterMethodBuilder.upperFirstChar;
 
 final class PrimaryBuilder {
@@ -56,8 +55,13 @@ final class PrimaryBuilder {
                 .withContainingClass(psiClass)
                 .withModifier(PsiModifier.PUBLIC);
 
-        result.add(setterMethodBuilder);
-        result.add(getterMethodBuilder);
-        result.add(queryByPrimaryBuilder);
+        if(!checkMethodExists(psiClass, setterMethodBuilder))
+            result.add(setterMethodBuilder);
+
+        if(!checkMethodExists(psiClass, getterMethodBuilder))
+            result.add(getterMethodBuilder);
+
+        if(!checkMethodExists(psiClass, queryByPrimaryBuilder))
+            result.add(queryByPrimaryBuilder);
     }
 }
