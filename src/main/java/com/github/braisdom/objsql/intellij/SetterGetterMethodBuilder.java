@@ -1,8 +1,10 @@
 package com.github.braisdom.objsql.intellij;
 
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiField;
+import com.intellij.psi.PsiModifier;
+import com.intellij.psi.PsiType;
 import com.intellij.psi.search.GlobalSearchScope;
 
 import java.util.Collection;
@@ -12,12 +14,9 @@ import static com.github.braisdom.objsql.intellij.ObjSqlPsiAugmentProvider.check
 
 final class SetterGetterMethodBuilder {
 
-    private static final Logger LOGGER = Logger.getInstance(SetterGetterMethodBuilder.class.getName());
-
     static void buildMethod(PsiClass psiClass, List result) {
         final Project project = psiClass.getProject();
         Collection<PsiField> fields = PsiClassUtil.collectClassFieldsIntern(psiClass);
-        LOGGER.warn("Field count: " + fields.size());
         for (PsiField field : fields) {
             String setterName = String.format("set%s", upperFirstChar(field.getName()));
             String getterName = String.format("%s%s", isBoolean(field.getType()) ? "is" : "get",

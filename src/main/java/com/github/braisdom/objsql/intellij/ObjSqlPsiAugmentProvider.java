@@ -1,6 +1,5 @@
 package com.github.braisdom.objsql.intellij;
 
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.RecursionGuard;
 import com.intellij.openapi.util.RecursionManager;
@@ -20,7 +19,6 @@ import java.util.List;
 
 public class ObjSqlPsiAugmentProvider extends PsiAugmentProvider {
 
-    private static final Logger LOGGER = Logger.getInstance(ObjSqlPsiAugmentProvider.class.getName());
     public static final String DOMAIN_MODEL_CLASSNAME = "com.github.braisdom.objsql.annotations.DomainModel";
 
     private static final List LANG_PRIMARY_TYPES = Arrays.asList(new String[]{"Long", "Integer", "String", "Short"});
@@ -103,7 +101,6 @@ public class ObjSqlPsiAugmentProvider extends PsiAugmentProvider {
                     PersistenceMethodBuilder.buildMethod(psiClass, result);
                     ModelMethodBuilder.buildMethod(psiClass, result);
                     TableClassBuilder.buildMethod(psiClass, result);
-                    LOGGER.warn("Generated methods count: " + result.size());
                 } else if (type == PsiField.class) {
                     RelationFieldBuilder.buildField(psiClass, result);
                     PrimaryBuilder.buildField(psiClass, result);

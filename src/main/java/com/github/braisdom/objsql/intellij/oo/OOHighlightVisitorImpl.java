@@ -14,10 +14,12 @@
  */
 package com.github.braisdom.objsql.intellij.oo;
 
+import com.github.braisdom.objsql.intellij.ObjSqlPsiAugmentProvider;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.codeInsight.daemon.impl.analysis.HighlightInfoHolder;
 import com.intellij.codeInsight.daemon.impl.analysis.HighlightVisitorImpl;
 import com.intellij.lang.annotation.HighlightSeverity;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import org.jetbrains.annotations.NotNull;
@@ -28,6 +30,8 @@ import java.util.List;
 import static com.github.braisdom.objsql.intellij.oo.Util.sneakyThrow;
 
 public class OOHighlightVisitorImpl extends HighlightVisitorImpl {
+
+    private static final Logger LOGGER = Logger.getInstance(ObjSqlPsiAugmentProvider.class.getName());
 
     private HighlightInfoHolder myHolder;
     private PsiResolveHelper resolveHelper;
@@ -62,7 +66,8 @@ public class OOHighlightVisitorImpl extends HighlightVisitorImpl {
             }
             if (lType != OOResolver.NoType)
                 removeLastHighlight();
-        }
+            else LOGGER.info("visitPolyadicExpression lType = OOResolver.NoType, lType:" + lType);
+        } else LOGGER.info("visitPolyadicExpression ignore highlihted");
     }
 
     @Override // Unary OO
@@ -71,7 +76,8 @@ public class OOHighlightVisitorImpl extends HighlightVisitorImpl {
         if (isHighlighted(expression)
                 && OOResolver.getOOType(expression) != OOResolver.NoType) {
             removeLastHighlight();
-        }
+        } else LOGGER.info("visitPrefixExpression ignore highlihted, Highlighted: "
+                + isHighlighted(expression) + ", OOType: " + OOResolver.getOOType(expression));
     }
 
     @Override // Index-Get OO
@@ -82,6 +88,8 @@ public class OOHighlightVisitorImpl extends HighlightVisitorImpl {
             if (isHighlighted(paa.getArrayExpression())
                     && OOResolver.indexGet((PsiArrayAccessExpression) expression) != OOResolver.NoType)
                 removeLastHighlight();
+            else LOGGER.info("visitExpression ignore highlihted, Highlighted: "
+                    + isHighlighted(paa.getArrayExpression()) + ", OOType: " + OOResolver.indexGet((PsiArrayAccessExpression) expression));
         }
     }
 
@@ -95,10 +103,15 @@ public class OOHighlightVisitorImpl extends HighlightVisitorImpl {
                 PsiArrayAccessExpression paa = (PsiArrayAccessExpression) ass.getLExpression();
                 if (OOResolver.indexSet(paa, ass.getRExpression()) != OOResolver.NoType)
                     removeLastHighlight();
-            }
+                else LOGGER.info("visitAssignmentExpression ignore highlihted, OOType: "
+                        + OOResolver.indexSet(paa, ass.getRExpression()));
+            } else LOGGER.info("visitAssignmentExpression ignore highlihted, Highlighted: "
+                    + isHighlighted(ass.getLExpression()));
             // Implicit type conversion in assignment
             if (isHighlighted(ass) && OOResolver.isTypeConvertible(ass.getLExpression().getType(), ass.getRExpression()))
                 removeLastHighlight();
+            else LOGGER.info("visitAssignmentExpression ignore highlihted, Highlighted: "
+                    + isHighlighted(ass) + ", isTypeConvertible: " + OOResolver.isTypeConvertible(ass.getLExpression().getType(), ass.getRExpression()));
         }
     }
 
@@ -107,6 +120,8 @@ public class OOHighlightVisitorImpl extends HighlightVisitorImpl {
         super.visitVariable(var);
         if (var.hasInitializer() && isHighlighted(var) && OOResolver.isTypeConvertible(var.getType(), var.getInitializer()))
             removeLastHighlight();
+        else LOGGER.info("visitVariable hasInitializer: " + var.hasInitializer()
+                + ", isHighlighted: " + isHighlighted(var) + ", isTypeConvertible: " + OOResolver.isTypeConvertible(var.getType(), var.getInitializer()));
     }
 
     private boolean isHighlighted(@NotNull PsiElement expression) {
