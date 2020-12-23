@@ -37,8 +37,6 @@ public class OOHighlightVisitorImpl extends HighlightVisitorImpl {
     private PsiResolveHelper resolveHelper;
 
     protected OOHighlightVisitorImpl(@NotNull PsiResolveHelper resolveHelper) {
-        super(resolveHelper);
-
         this.resolveHelper = resolveHelper;
     }
 
@@ -50,6 +48,11 @@ public class OOHighlightVisitorImpl extends HighlightVisitorImpl {
         } finally {
             myHolder = null;
         }
+    }
+
+    @Override
+    public void visitMethod(PsiMethod method) {
+        super.visitMethod(method);
     }
 
     @Override // Binary OO

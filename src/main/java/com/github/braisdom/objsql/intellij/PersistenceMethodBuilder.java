@@ -94,8 +94,9 @@ final class PersistenceMethodBuilder {
     private static void buildUpdate(Project project, PsiClass psiClass, List result) {
         ObjSqlLightMethodBuilder methodBuilder = new ObjSqlLightMethodBuilder(psiClass.getManager(), "update");
         PsiType primaryType = getPrimaryType(psiClass);
+        String primaryKeyName = getPrimaryName(psiClass);
         methodBuilder
-                .withParameter("id", primaryType)
+                .withParameter(primaryKeyName, primaryType)
                 .withParameter("dirtyObject", getProjectType(psiClass.getQualifiedName(), project))
                 .withParameter("skipValidation", PsiType.BOOLEAN)
                 .withMethodReturnType(getProjectType(psiClass.getQualifiedName(), project))
@@ -125,8 +126,9 @@ final class PersistenceMethodBuilder {
     private static void buildDestroy(Project project, PsiClass psiClass, List result) {
         ObjSqlLightMethodBuilder methodBuilder = new ObjSqlLightMethodBuilder(psiClass.getManager(), "destroy");
         PsiType primaryType = getPrimaryType(psiClass);
+        String primaryKeyName = getPrimaryName(psiClass);
         methodBuilder
-                .withParameter("id", primaryType)
+                .withParameter(primaryKeyName, primaryType)
                 .withMethodReturnType(PsiType.INT)
                 .withContainingClass(psiClass)
                 .withModifier(PsiModifier.PUBLIC, PsiModifier.STATIC, PsiModifier.FINAL)

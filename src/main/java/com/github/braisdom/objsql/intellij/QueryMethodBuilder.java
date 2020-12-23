@@ -76,18 +76,20 @@ final class QueryMethodBuilder {
     }
 
     private static void buildPagedQuery(Project project, PsiClass psiClass, List result) {
-        ObjSqlLightMethodBuilder methodBuilder = new ObjSqlLightMethodBuilder(psiClass.getManager(), "pagedQuery");
-        PsiType returnType = createParameterType(project, "com.github.braisdom.objsql.pagination.PagedList", psiClass.getQualifiedName());
-        methodBuilder.withParameter("page", "com.github.braisdom.objsql.pagination.Page")
-                .withParameter("predicate", "java.lang.String")
-                .withParameter("args", "java.lang.Object", true)
-                .withMethodReturnType(returnType)
-                .withContainingClass(psiClass)
-                .withModifier(PsiModifier.PUBLIC, PsiModifier.STATIC, PsiModifier.FINAL)
-                .withException(PsiClassType.getTypeByName("java.sql.SQLException", project, GlobalSearchScope.allScope(project)));
+        if(hasType("com.github.braisdom.objsql.pagination.PagedList", project)) {
+            ObjSqlLightMethodBuilder methodBuilder = new ObjSqlLightMethodBuilder(psiClass.getManager(), "pagedQuery");
+            PsiType returnType = createParameterType(project, "com.github.braisdom.objsql.pagination.PagedList", psiClass.getQualifiedName());
+            methodBuilder.withParameter("page", "com.github.braisdom.objsql.pagination.Page")
+                    .withParameter("predicate", "java.lang.String")
+                    .withParameter("args", "java.lang.Object", true)
+                    .withMethodReturnType(returnType)
+                    .withContainingClass(psiClass)
+                    .withModifier(PsiModifier.PUBLIC, PsiModifier.STATIC, PsiModifier.FINAL)
+                    .withException(PsiClassType.getTypeByName("java.sql.SQLException", project, GlobalSearchScope.allScope(project)));
 
-        if(!checkMethodExists(psiClass, methodBuilder))
-            result.add(methodBuilder);
+            if (!checkMethodExists(psiClass, methodBuilder))
+                result.add(methodBuilder);
+        }
     }
 
     private static void buildQuery2(Project project, PsiClass psiClass, List result) {
@@ -107,20 +109,22 @@ final class QueryMethodBuilder {
     }
 
     private static void buildPagedQuery2(Project project, PsiClass psiClass, List result) {
-        ObjSqlLightMethodBuilder methodBuilder = new ObjSqlLightMethodBuilder(psiClass.getManager(), "pagedQuery");
-        PsiType returnType = createParameterType(project, "com.github.braisdom.objsql.pagination.PagedList", psiClass.getQualifiedName());
-        methodBuilder.withParameter("page", "com.github.braisdom.objsql.pagination.Page")
-                .withParameter("predicate", "java.lang.String")
-                .withParameter("relations",
-                        getProjectType("com.github.braisdom.objsql.relation.Relationship", project).createArrayType())
-                .withParameter("args", "java.lang.Object", true)
-                .withMethodReturnType(returnType)
-                .withContainingClass(psiClass)
-                .withModifier(PsiModifier.PUBLIC, PsiModifier.STATIC, PsiModifier.FINAL)
-                .withException(PsiClassType.getTypeByName("java.sql.SQLException", project, GlobalSearchScope.allScope(project)));
+        if(hasType("com.github.braisdom.objsql.pagination.PagedList", project)) {
+            ObjSqlLightMethodBuilder methodBuilder = new ObjSqlLightMethodBuilder(psiClass.getManager(), "pagedQuery");
+            PsiType returnType = createParameterType(project, "com.github.braisdom.objsql.pagination.PagedList", psiClass.getQualifiedName());
+            methodBuilder.withParameter("page", "com.github.braisdom.objsql.pagination.Page")
+                    .withParameter("predicate", "java.lang.String")
+                    .withParameter("relations",
+                            getProjectType("com.github.braisdom.objsql.relation.Relationship", project).createArrayType())
+                    .withParameter("args", "java.lang.Object", true)
+                    .withMethodReturnType(returnType)
+                    .withContainingClass(psiClass)
+                    .withModifier(PsiModifier.PUBLIC, PsiModifier.STATIC, PsiModifier.FINAL)
+                    .withException(PsiClassType.getTypeByName("java.sql.SQLException", project, GlobalSearchScope.allScope(project)));
 
-        if(!checkMethodExists(psiClass, methodBuilder))
-            result.add(methodBuilder);
+            if (!checkMethodExists(psiClass, methodBuilder))
+                result.add(methodBuilder);
+        }
     }
 
     private static void buildQuery3(Project project, PsiClass psiClass, List result) {
@@ -151,17 +155,19 @@ final class QueryMethodBuilder {
     }
 
     private static void buildPagedQueryAll(Project project, PsiClass psiClass, List result) {
-        ObjSqlLightMethodBuilder methodBuilder = new ObjSqlLightMethodBuilder(psiClass.getManager(), "pagedQueryAll");
-        PsiType returnType = createParameterType(project, "com.github.braisdom.objsql.pagination.PagedList", psiClass.getQualifiedName());
-        methodBuilder.withParameter("page", "com.github.braisdom.objsql.pagination.Page")
-                .withParameter("relations", "com.github.braisdom.objsql.relation.Relationship", true)
-                .withMethodReturnType(returnType)
-                .withContainingClass(psiClass)
-                .withModifier(PsiModifier.PUBLIC, PsiModifier.STATIC, PsiModifier.FINAL)
-                .withException(PsiClassType.getTypeByName("java.sql.SQLException", project, GlobalSearchScope.allScope(project)));
+        if(hasType("com.github.braisdom.objsql.pagination.PagedList", project)) {
+            ObjSqlLightMethodBuilder methodBuilder = new ObjSqlLightMethodBuilder(psiClass.getManager(), "pagedQueryAll");
+            PsiType returnType = createParameterType(project, "com.github.braisdom.objsql.pagination.PagedList", psiClass.getQualifiedName());
+            methodBuilder.withParameter("page", "com.github.braisdom.objsql.pagination.Page")
+                    .withParameter("relations", "com.github.braisdom.objsql.relation.Relationship", true)
+                    .withMethodReturnType(returnType)
+                    .withContainingClass(psiClass)
+                    .withModifier(PsiModifier.PUBLIC, PsiModifier.STATIC, PsiModifier.FINAL)
+                    .withException(PsiClassType.getTypeByName("java.sql.SQLException", project, GlobalSearchScope.allScope(project)));
 
-        if(!checkMethodExists(psiClass, methodBuilder))
-            result.add(methodBuilder);
+            if (!checkMethodExists(psiClass, methodBuilder))
+                result.add(methodBuilder);
+        }
     }
 
     private static void buildQueryFirst(Project project, PsiClass psiClass, List result) {

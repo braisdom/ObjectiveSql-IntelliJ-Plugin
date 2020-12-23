@@ -2,7 +2,7 @@
     <id>com.github.braisdom.object-sql-intellij</id>
     <name>ObjectiveSql</name>
     <vendor email="wangyonghe@msn.com" url="http://www.objsql.com">ObjectiveSql</vendor>
-    <version>1.3.2</version>
+    <version>1.3.4</version>
     <idea-version since-build="191.1"/>
     <category>Tools Integration</category>
     <description><![CDATA[
@@ -43,6 +43,7 @@
     <extensions defaultExtensionNs="com.intellij">
         <lang.psiAugmentProvider implementation="com.github.braisdom.objsql.intellij.ObjSqlPsiAugmentProvider"/>
         <implicitUsageProvider implementation="com.github.braisdom.objsql.intellij.ObjSqlImplicitUsageProvider"/>
+<!--        <debugger.sourcePositionProvider implementation="com.github.braisdom.objsql.intellij.ObjSqlSourcePositionProvider" />-->
     </extensions>
 
     <actions>

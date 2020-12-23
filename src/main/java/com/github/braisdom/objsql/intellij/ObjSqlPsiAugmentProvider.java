@@ -38,7 +38,6 @@ public class ObjSqlPsiAugmentProvider extends PsiAugmentProvider {
         }
 
         PsiAnnotation psiAnnotation = PsiAnnotationSearchUtil.findAnnotation(psiClass, DOMAIN_MODEL_CLASSNAME);
-
         if (psiAnnotation == null)
             return result;
 
@@ -96,14 +95,15 @@ public class ObjSqlPsiAugmentProvider extends PsiAugmentProvider {
 
                 if (type == PsiMethod.class) {
                     SetterGetterMethodBuilder.buildMethod(psiClass, result);
-                    PrimaryBuilder.buildMethod(psiClass, result);
+                    PrimaryKeyBuilder.buildMethod(psiClass, result);
+                    PrimaryKeyBuilder.buildQueryByPrimaryKeyMethod(psiClass, result);
                     QueryMethodBuilder.buildMethod(psiClass, result);
                     PersistenceMethodBuilder.buildMethod(psiClass, result);
                     ModelMethodBuilder.buildMethod(psiClass, result);
                     TableClassBuilder.buildMethod(psiClass, result);
                 } else if (type == PsiField.class) {
                     RelationFieldBuilder.buildField(psiClass, result);
-                    PrimaryBuilder.buildField(psiClass, result);
+                    PrimaryKeyBuilder.buildField(psiClass, result);
                     ModelMethodBuilder.buildField(psiClass, result);
                 } else if (type == PsiClass.class) {
                     TableClassBuilder.buildClass(psiClass, result);
@@ -114,41 +114,66 @@ public class ObjSqlPsiAugmentProvider extends PsiAugmentProvider {
         }
     }
 
+    static PsiField getPrimaryKeyField(PsiClass psiClass) {
+        PsiField[] fields = psiClass.getAllFields();
+        for (PsiField field : fields) {
+            if (field.getAnnotation("com.github.braisdom.objsql.annotations.PrimaryKey") != null) {
+                return field;
+            }
+        }
+        return null;
+    }
+
     static String getPrimaryName(PsiClass psiClass) {
-        PsiAnnotation annotation = psiClass.getAnnotation(DOMAIN_MODEL_CLASSNAME);
-        if (annotation == null)
-            return "id";
-        else {
-            PsiAnnotationMemberValue annotationMemberValue = annotation
-                    .findAttributeValue("primaryFieldName");
-            if(annotationMemberValue != null)
-                return annotationMemberValue.getText().replaceAll("^\"|\"$", "");
-            else return null;
+        PsiField psiField = getPrimaryKeyField(psiClass);
+        if (psiField == null) {
+            PsiAnnotation annotation = psiClass.getAnnotation(DOMAIN_MODEL_CLASSNAME);
+            if (annotation == null)
+                return "id";
+            else {
+                PsiAnnotationMemberValue annotationMemberValue = annotation
+                        .findAttributeValue("primaryFieldName");
+                if (annotationMemberValue != null)
+                    return annotationMemberValue.getText().replaceAll("^\"|\"$", "");
+                else return null;
+            }
+        } else {
+            return psiField.getName();
         }
     }
 
     static PsiType getPrimaryType(PsiClass psiClass) {
-        Project project = psiClass.getProject();
-        String rawPrimaryTypeName = "Integer";
-        PsiAnnotation annotation = psiClass.getAnnotation(DOMAIN_MODEL_CLASSNAME);
-        if (annotation != null) {
-            PsiAnnotationMemberValue annotationMemberValue = annotation.findAttributeValue("primaryClass");
-            if (annotationMemberValue != null)
-                rawPrimaryTypeName = annotationMemberValue.getText();
-            String[] rawPrimaryTypePart = rawPrimaryTypeName.split("\\.");
-            String primaryTypeName = String.join(".",
-                    Arrays.copyOfRange(rawPrimaryTypePart, 0, rawPrimaryTypePart.length - 1));
-            if (LANG_PRIMARY_TYPES.contains(primaryTypeName))
-                primaryTypeName = String.format("java.lang.%s", primaryTypeName);
+        PsiField psiField = getPrimaryKeyField(psiClass);
+        if (psiField == null) {
+            Project project = psiClass.getProject();
+            String rawPrimaryTypeName = "Integer";
+            PsiAnnotation annotation = psiClass.getAnnotation(DOMAIN_MODEL_CLASSNAME);
+            if (annotation != null) {
+                PsiAnnotationMemberValue annotationMemberValue = annotation.findAttributeValue("primaryClass");
+                if (annotationMemberValue != null)
+                    rawPrimaryTypeName = annotationMemberValue.getText();
+                String[] rawPrimaryTypePart = rawPrimaryTypeName.split("\\.");
+                String primaryTypeName = String.join(".",
+                        Arrays.copyOfRange(rawPrimaryTypePart, 0, rawPrimaryTypePart.length - 1));
+                if (LANG_PRIMARY_TYPES.contains(primaryTypeName))
+                    primaryTypeName = String.format("java.lang.%s", primaryTypeName);
 
-            return PsiType.getTypeByName(primaryTypeName, project, GlobalSearchScope.allScope(project));
-        } else
-            return PsiType.getTypeByName("java.lang.Long", project, GlobalSearchScope.allScope(project));
+                return PsiType.getTypeByName(primaryTypeName, project, GlobalSearchScope.allScope(project));
+            } else
+                return PsiType.getTypeByName("java.lang.Long", project, GlobalSearchScope.allScope(project));
+        } else {
+            return psiField.getType();
+        }
     }
 
     static PsiType getProjectType(String qName, Project project) {
         return PsiType.getTypeByName(qName,
                 project, GlobalSearchScope.allScope(project));
+    }
+
+    static boolean hasType(String qName, Project project) {
+        return PsiType.getTypeByName(qName,
+                project, GlobalSearchScope.allScope(project)).resolve() != null;
     }
 
     static PsiType createParameterType(Project project, String qName, String... parameters) {
@@ -170,21 +195,21 @@ public class ObjSqlPsiAugmentProvider extends PsiAugmentProvider {
     static boolean checkMethodExists(PsiClass psiClass, PsiMethod psiMethod) {
         PsiMethod[] methods = psiClass.findMethodsByName(psiMethod.getName(), true);
         for (PsiMethod method : methods) {
-            if (!(method instanceof ObjSqlLightMethodBuilder)) {
+            if (method instanceof ObjSqlLightMethodBuilder) {
                 PsiParameterList psiParameterList1 = method.getParameterList();
                 PsiParameterList psiParameterList2 = psiMethod.getParameterList();
-                if(psiParameterList1.getParameters().length == psiParameterList2.getParameters().length) {
+                if (psiParameterList1.getParameters().length == psiParameterList2.getParameters().length) {
+                    int sameCount = 0;
                     int parameterLength = psiParameterList1.getParameters().length;
-                    boolean parameterConsistent = true;
                     PsiParameter[] psiElements1 = psiParameterList1.getParameters();
                     PsiParameter[] psiElements2 = psiParameterList2.getParameters();
-                    for(int i =0; i< parameterLength; i++) {
-                        if(!psiElements1[i].getType().equals(psiElements2[i].getType())) {
-                            parameterConsistent = false;
-                            break;
+
+                    for (int i = 0; i < parameterLength; i++) {
+                        if (psiElements1[i].getType().equals(psiElements2[i].getType())) {
+                            sameCount++;
                         }
                     }
-                    return parameterConsistent;
+                    return parameterLength == sameCount;
                 }
             }
         }

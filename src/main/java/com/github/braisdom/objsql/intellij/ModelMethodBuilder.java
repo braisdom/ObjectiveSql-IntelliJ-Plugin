@@ -8,8 +8,7 @@ import com.intellij.psi.impl.light.LightFieldBuilder;
 
 import java.util.List;
 
-import static com.github.braisdom.objsql.intellij.ObjSqlPsiAugmentProvider.createParameterType;
-import static com.github.braisdom.objsql.intellij.ObjSqlPsiAugmentProvider.getProjectType;
+import static com.github.braisdom.objsql.intellij.ObjSqlPsiAugmentProvider.*;
 
 final class ModelMethodBuilder {
 
@@ -52,7 +51,9 @@ final class ModelMethodBuilder {
                 .withContainingClass(psiClass)
                 .withModifier(PsiModifier.PUBLIC, PsiModifier.FINAL);
 
-        result.add(methodBuilder);
+        if(!checkMethodExists(psiClass, methodBuilder)) {
+            result.add(methodBuilder);
+        }
     }
 
     private static void buildGetRawAttribute(PsiClass psiClass, List result) {
@@ -64,6 +65,8 @@ final class ModelMethodBuilder {
                 .withContainingClass(psiClass)
                 .withModifier(PsiModifier.PUBLIC, PsiModifier.FINAL);
 
-        result.add(methodBuilder);
+        if(!checkMethodExists(psiClass, methodBuilder)) {
+            result.add(methodBuilder);
+        }
     }
 }

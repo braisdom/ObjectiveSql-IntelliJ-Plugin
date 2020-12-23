@@ -112,6 +112,7 @@ public class ObjSqlLightMethodBuilder extends LightMethodBuilder {
     }
 
     // add Parameter as is, without wrapping with LightTypeParameter
+    @Override
     public LightMethodBuilder addTypeParameter(PsiTypeParameter parameter) {
         ((LightTypeParameterListBuilder) getTypeParameterList()).addParameter(parameter);
         return this;
@@ -217,6 +218,7 @@ public class ObjSqlLightMethodBuilder extends LightMethodBuilder {
         return null == myPsiMethod ? PsiElement.EMPTY_ARRAY : myPsiMethod.getChildren();
     }
 
+    @Override
     public String toString() {
         return getClass().getSimpleName() + "#" + getName();
     }
@@ -238,8 +240,9 @@ public class ObjSqlLightMethodBuilder extends LightMethodBuilder {
             return true;
         }
 
-        if (!(o instanceof PsiMethod))
+        if (!(o instanceof PsiMethod)) {
             return false;
+        }
 
         PsiMethod that = (PsiMethod) o;
         if (!getName().equals(that.getName())) {
