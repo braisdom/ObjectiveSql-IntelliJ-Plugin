@@ -11,6 +11,7 @@ import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.util.PsiModificationTracker;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,10 +26,11 @@ public class ObjSqlPsiAugmentProvider extends PsiAugmentProvider {
 
     @NotNull
     @Override
-    protected <Psi extends PsiElement> List<Psi> getAugments(@NotNull PsiElement element, @NotNull Class<Psi> type) {
+    protected <Psi extends PsiElement> List<Psi> getAugments(@NotNull PsiElement element, @NotNull Class<Psi> type, @Nullable String nameHint) {
         final List<Psi> result = Collections.emptyList();
 
-        if ((type != PsiClass.class && type != PsiField.class && type != PsiMethod.class) || !(element instanceof PsiExtensibleClass)) {
+        if ((type != PsiClass.class && type != PsiField.class && type != PsiMethod.class)
+                || !(element instanceof PsiExtensibleClass)) {
             return result;
         }
 
@@ -159,8 +161,9 @@ public class ObjSqlPsiAugmentProvider extends PsiAugmentProvider {
                     primaryTypeName = String.format("java.lang.%s", primaryTypeName);
 
                 return PsiType.getTypeByName(primaryTypeName, project, GlobalSearchScope.allScope(project));
-            } else
+            } else {
                 return PsiType.getTypeByName("java.lang.Long", project, GlobalSearchScope.allScope(project));
+            }
         } else {
             return psiField.getType();
         }
@@ -195,10 +198,13 @@ public class ObjSqlPsiAugmentProvider extends PsiAugmentProvider {
     static boolean checkMethodExists(PsiClass psiClass, PsiMethod psiMethod) {
         PsiMethod[] methods = psiClass.findMethodsByName(psiMethod.getName(), true);
         for (PsiMethod method : methods) {
-            if (method instanceof ObjSqlLightMethodBuilder) {
+            if(!(method instanceof ObjSqlLightMethodBuilder)) {
                 PsiParameterList psiParameterList1 = method.getParameterList();
                 PsiParameterList psiParameterList2 = psiMethod.getParameterList();
-                if (psiParameterList1.getParameters().length == psiParameterList2.getParameters().length) {
+
+                if (psiParameterList1.isEmpty() && psiParameterList2.isEmpty()) {
+                    return true;
+                } else if (psiParameterList1.getParametersCount() == psiParameterList2.getParametersCount()) {
                     int sameCount = 0;
                     int parameterLength = psiParameterList1.getParameters().length;
                     PsiParameter[] psiElements1 = psiParameterList1.getParameters();
@@ -209,7 +215,9 @@ public class ObjSqlPsiAugmentProvider extends PsiAugmentProvider {
                             sameCount++;
                         }
                     }
-                    return parameterLength == sameCount;
+                    if (parameterLength == sameCount) {
+                        return true;
+                    }
                 }
             }
         }

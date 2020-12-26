@@ -3,7 +3,7 @@
     <name>ObjectiveSql</name>
     <vendor email="wangyonghe@msn.com" url="http://www.objsql.com">ObjectiveSql</vendor>
     <version>1.3.4</version>
-    <idea-version since-build="191.1"/>
+    <idea-version since-build="193"/>
     <category>Tools Integration</category>
     <description><![CDATA[
         <p> Filling the generated elements for ObjectSql. Discuss, review, and share code with your

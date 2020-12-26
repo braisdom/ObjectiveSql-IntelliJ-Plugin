@@ -37,6 +37,7 @@ public class OOHighlightVisitorImpl extends HighlightVisitorImpl {
     private PsiResolveHelper resolveHelper;
 
     protected OOHighlightVisitorImpl(@NotNull PsiResolveHelper resolveHelper) {
+        super(resolveHelper);
         this.resolveHelper = resolveHelper;
     }
 
