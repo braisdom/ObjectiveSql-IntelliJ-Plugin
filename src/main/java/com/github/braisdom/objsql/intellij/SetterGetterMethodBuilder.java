@@ -48,10 +48,14 @@ final class SetterGetterMethodBuilder {
     }
 
     static String upperFirstChar(String str) {
-        char[] ch = str.toCharArray();
-        if (ch[0] >= 'a' && ch[0] <= 'z') {
-            ch[0] = (char) (ch[0] - 32);
+        if(str == null || str.length() == 0) {
+            return str;
+        } else {
+            char[] ch = str.toCharArray();
+            if (ch[0] >= 'a' && ch[0] <= 'z') {
+                ch[0] = (char) (ch[0] - 32);
+            }
+            return new String(ch);
         }
-        return new String(ch);
     }
 }
